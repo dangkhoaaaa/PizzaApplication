@@ -35,7 +35,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation("com.squareup.retrofit2:adapter-rxjava2:2.11.0")
-
+    implementation("androidx.navigation:navigation-fragment-ktx:2.4.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.0")
     //  implementation("android.arch.lifecycle:extensions:1.1.1")
     implementation ("io.reactivex.rxjava2:rxjava:2.2.21")
 

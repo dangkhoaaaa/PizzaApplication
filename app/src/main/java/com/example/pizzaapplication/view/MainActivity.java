@@ -1,52 +1,84 @@
 package com.example.pizzaapplication.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.pizzaapplication.R;
-import com.example.pizzaapplication.adapter.UserAdapter;
-import com.example.pizzaapplication.data.api.RetrofitClient;
-import com.example.pizzaapplication.data.model.User;
-import com.example.pizzaapplication.data.repository.MainRepository;
-import com.example.pizzaapplication.viewmodel.MainViewModel;
-import java.util.List;
+
+import com.example.pizzaapplication.view.PizzaFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView recyclerView;
-    private UserAdapter userAdapter;
-    private MainViewModel mainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize RecyclerView
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        userAdapter = new UserAdapter();
-        recyclerView.setAdapter(userAdapter);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // Initialize MainRepository and MainViewModel
-        MainRepository mainRepository = new MainRepository(RetrofitClient.getApiService());
-        mainViewModel = new MainViewModel(mainRepository);
-
-        // Observe LiveData from MainViewModel
-        LiveData<List<User>> liveDataUsers = mainViewModel.getUsers();
-        liveDataUsers.observe(this, new Observer<List<User>>() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onChanged(List<User> users) {
-                // Update UI
-                displayUsers(users);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.navigation_pizza) {
+                    loadFragment(new PizzaFragment());
+                    return true;
+                } else if (itemId == R.id.navigation_drink) {
+                    loadFragment(new PizzaFragment());
+                    return true;
+                } else if (itemId == R.id.navigation_map) {
+                    loadFragment(new PizzaFragment());
+                    return true;
+                } else if (itemId == R.id.navigation_account) {
+                    loadFragment(new PizzaFragment());
+                    return true;
+                }
+                return false;
             }
+
         });
+
+        // Mặc định hiển thị trang Pizza khi activity khởi động
+        if (savedInstanceState == null) {
+            bottomNavigationView.setSelectedItemId(R.id.navigation_pizza);
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_notification) {
+            // Xử lý khi click vào chuông thông báo
+            return true;
+        } else if (id == R.id.action_cart) {
+            // Xử lý khi click vào biểu tượng giỏ hàng
+            Intent intent = new Intent(MainActivity.this, CartActivity.class);
+            startActivity(intent);
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
-    private void displayUsers(List<User> users) {
-        userAdapter.setUsers(users);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

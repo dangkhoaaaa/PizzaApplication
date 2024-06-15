@@ -1,26 +1,34 @@
 package com.example.pizzaapplication.view;
 
 import android.os.Bundle;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.pizzaapplication.R;
+import com.example.pizzaapplication.data.model.Request.CustomerPizzaRequestModel;
+
+import java.util.List;
 
 public class CartActivity extends AppCompatActivity {
 
+    private ListView listViewCart;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cart);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        listViewCart = findViewById(R.id.listViewCart);
+
+        List<CustomerPizzaRequestModel> cart = PizzaDetailActivity.getCart();
+        if (cart != null && !cart.isEmpty()) {
+            com.example.pizzaapplication.view.CartAdapter adapter = new com.example.pizzaapplication.view.CartAdapter(this, cart);
+            listViewCart.setAdapter(adapter);
+        } else {
+            Toast.makeText(this, "Your cart is empty", Toast.LENGTH_SHORT).show();
+        }
     }
 }

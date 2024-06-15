@@ -1,26 +1,41 @@
 package com.example.pizzaapplication.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.pizzaapplication.R;
 
 public class InitActivity extends AppCompatActivity {
 
+    private Button buttonLogin;
+    private Button buttonGuest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_init);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        buttonLogin = findViewById(R.id.buttonLogin);
+        buttonGuest = findViewById(R.id.buttonGuest);
+
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(InitActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        buttonGuest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(InitActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
         });
     }
 }

@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/action_cart"
-        android:icon="@drawable/pizza_init"
+        android:icon="@drawable/cart_icon"
         android:title="Cart"
         app:showAsAction="always"/>
 
