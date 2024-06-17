@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(new PizzaFragment());
                     return true;
                 } else if (itemId == R.id.navigation_drink) {
-                    loadFragment(new PizzaFragment());
+                    loadFragment(new DrinkFragment());
                     return true;
                 } else if (itemId == R.id.navigation_map) {
                     loadFragment(new PizzaFragment());

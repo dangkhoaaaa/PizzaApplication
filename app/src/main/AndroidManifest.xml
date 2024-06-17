@@ -16,6 +16,9 @@
         android:theme="@style/Theme.PizzaApplication"
         tools:targetApi="31">
         <activity
+            android:name=".view.DrinkFragment"
+            android:exported="false" />
+        <activity
             android:name=".view.CartActivity"
             android:exported="false" />
         <activity
