@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="btn_search">30dp</dimen>
+    <dimen name="btn_search_radius">15dp</dimen>
+
+    <dimen name="xl">4dp</dimen>
+    <dimen name="xxl">8dp</dimen>
+    <dimen name="xxxl">16dp</dimen>
+    <dimen name="xxxxl">32dp</dimen>
+
+    <dimen name="tab_line_height">3dp</dimen>
+</resources>

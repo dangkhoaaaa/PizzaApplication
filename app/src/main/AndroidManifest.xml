@@ -26,6 +26,9 @@
             android:name=".view.MapFragment"
             android:exported="false" />
         <activity
+            android:name=".view.updateProfile"
+            android:exported="false" />
+        <activity
             android:name=".view.DrinkFragment"
             android:exported="false" />
         <activity

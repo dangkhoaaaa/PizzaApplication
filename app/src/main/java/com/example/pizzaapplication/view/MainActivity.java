@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(new MapFragment());
                     return true;
                 } else if (itemId == R.id.navigation_account) {
-                    loadFragment(new PizzaFragment());
+                    loadFragment(new ProfileFragment());
                     return true;
                 }
                 return false;

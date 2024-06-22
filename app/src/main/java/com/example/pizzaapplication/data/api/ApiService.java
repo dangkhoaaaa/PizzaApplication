@@ -5,6 +5,7 @@ import com.example.pizzaapplication.data.model.Request.CustomerOrderRequestModel
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
 import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
+import com.example.pizzaapplication.data.model.Response.ProfileResponseModel;
 import com.example.pizzaapplication.data.model.Response.SizeModel;
 import com.example.pizzaapplication.data.model.Response.SizeResponseModel;
 import com.example.pizzaapplication.data.model.Response.ToppingModel;
@@ -17,6 +18,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public interface ApiService {
 
@@ -37,5 +39,14 @@ public interface ApiService {
 
     @POST("cus-orders")
     Call<ApiResponse<Integer>> createOrder(@Body CustomerOrderRequestModel orderRequest);
+
+    //Get profile
+    @GET("users/profile?id=1")
+    Call<ProfileResponseModel> getProfile();
+
+    //update profile
+//    @PUT("users/profile?id=1")
+//    Call<>
+
 
 }

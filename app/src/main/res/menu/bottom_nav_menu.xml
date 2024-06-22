@@ -1,18 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_pizza"
-        android:icon="@drawable/pizza_init"
+        android:icon="@drawable/icons8_pizza_50"
         android:title="Pizza" />
     <item
         android:id="@+id/navigation_drink"
-        android:icon="@drawable/cart_icon"
+        android:icon="@drawable/icons8_drink_50"
         android:title="Drink" />
     <item
         android:id="@+id/navigation_map"
-        android:icon="@drawable/pizza_logo"
-        android:title="Map" />
+        android:icon="@drawable/icons8_map_50"
+        android:title="Map"/>
     <item
         android:id="@+id/navigation_account"
-        android:icon="@drawable/pizza_logo"
+        android:icon="@drawable/icons8_account_48"
         android:title="Account" />
 </menu>
