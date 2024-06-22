@@ -3,7 +3,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
-
+    <ImageView
+        android:id="@+id/imageViewPizza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Pizza Image" />
     <TextView
         android:id="@+id/textViewPizzaName"
         android:layout_width="wrap_content"

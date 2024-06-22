@@ -1,4 +1,3 @@
-// DrinkFragment.java
 package com.example.pizzaapplication.view;
 
 import android.os.Bundle;
@@ -6,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,11 +35,10 @@ public class DrinkFragment extends Fragment {
     private static final String TAG = "DrinkFragment";
     private static List<CustomerDrinkRequestModel> cart = new ArrayList<>();
 
-
-
     public static List<CustomerDrinkRequestModel> getDrinkCart() {
         return cart;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,8 +71,8 @@ public class DrinkFragment extends Fragment {
         // Set item click listener
         drinkAdapter.setOnItemClickListener(new DrinkAdapter.OnItemClickListener() {
             @Override
-            public void onItemAddToCart(DrinkModel drink) {
-                addToCart(drink);
+            public void onItemAddToCart(DrinkModel drink, int quantity) {
+                addToCart(drink, quantity);
             }
         });
 
@@ -86,11 +83,11 @@ public class DrinkFragment extends Fragment {
         drinkAdapter.setDrinks(drinks);
     }
 
-    private void addToCart(DrinkModel drink) {
-        // Add the drink to the cart
-        cart.add(new CustomerDrinkRequestModel(1,1,drink.getId(), drink.getPrice())); // Assuming 1 quantity
+    private void addToCart(DrinkModel drink, int quantity) {
+        // Add the drink to the cart with specified quantity
+        cart.add(new CustomerDrinkRequestModel(quantity, drink.getId(), drink.getPrice() * quantity));
         // Show a toast message
-        Toast.makeText(getContext(), drink.getName() + " added to cart", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), quantity + " x " + drink.getName() + " added to cart", Toast.LENGTH_SHORT).show();
     }
 
     private void logDrinks(List<DrinkModel> drinks) {

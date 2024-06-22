@@ -4,7 +4,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
-
+    <ImageView
+        android:id="@+id/imageViewPizza"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="8dp"/>
     <TextView
         android:id="@+id/textViewPizzaName"
         android:layout_width="match_parent"

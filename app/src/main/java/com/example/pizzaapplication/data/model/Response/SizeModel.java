@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class SizeModel implements Serializable {
-    @SerializedName("sizeId")
+    @SerializedName("id")
     private int sizeId;
 
     @SerializedName("name")

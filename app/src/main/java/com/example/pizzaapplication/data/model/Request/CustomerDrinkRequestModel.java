@@ -4,11 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class CustomerDrinkRequestModel {
 
-    @SerializedName("id")
-    private int id;
+    @SerializedName("quantity")
+    private int quantity;
 
-    @SerializedName("orderId")
-    private int orderId;
+
 
     @SerializedName("drinkId")
     private int drinkId;
@@ -18,36 +17,29 @@ public class CustomerDrinkRequestModel {
 
     // Default constructor
     public CustomerDrinkRequestModel() {
-        this.id = 0;
-        this.orderId = 0;
+        this.quantity = 0;
+
         this.drinkId = 0;
         this.price = 0;
     }
 
     // Parameterized constructor
-    public CustomerDrinkRequestModel(int id, int orderId, int drinkId, double price) {
-        this.id = id;
-        this.orderId = orderId;
+    public CustomerDrinkRequestModel(int quantity, int drinkId, double price) {
+        this.quantity = quantity;
+
         this.drinkId = drinkId;
         this.price = price;
     }
 
     // Getters and Setters
-    public int getId() {
-        return id;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setQuantity(int id) {
+        this.quantity = quantity;
     }
 
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
 
     public int getDrinkId() {
         return drinkId;
@@ -69,8 +61,7 @@ public class CustomerDrinkRequestModel {
     @Override
     public String toString() {
         return "CustomerDrink{" +
-                "id=" + id +
-                ", orderId=" + orderId +
+
                 ", drinkId=" + drinkId +
                 ", price=" + price +
                 '}';

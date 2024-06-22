@@ -4,6 +4,12 @@
     android:orientation="vertical"
     android:padding="8dp">
 
+    <ImageView
+        android:id="@+id/imageViewDrink"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="8dp"/>
     <TextView
         android:id="@+id/textViewDrinkName"
         android:layout_width="wrap_content"
@@ -25,6 +31,34 @@
         android:layout_height="wrap_content"
         android:text="Drink Price"
         android:textSize="14sp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/buttonDecreaseQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-" />
+
+        <TextView
+            android:id="@+id/textViewQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="1"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/buttonIncreaseQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+" />
+    </LinearLayout>
     <Button
         android:id="@+id/buttonAddToCart"
         android:layout_width="wrap_content"

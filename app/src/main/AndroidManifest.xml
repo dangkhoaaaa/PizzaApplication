@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -15,6 +18,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PizzaApplication"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD4yOJN6fpG63P-VUkSMfaEy1FG0otigNY" />
+
+        <activity
+            android:name=".view.MapFragment"
+            android:exported="false" />
         <activity
             android:name=".view.DrinkFragment"
             android:exported="false" />
@@ -24,11 +34,9 @@
         <activity
             android:name=".view.PizzaDetailActivity"
             android:exported="false" />
+
         <activity
-            android:name=".view.PizzaDetailFragment"
-            android:exported="false" />
-        <activity
-            android:name=".view.InitActivity"
+            android:name=".view.MainActivity"
             android:exported="false" />
         <activity
             android:name=".view.SignupActivity"
@@ -40,7 +48,7 @@
             android:name=".view.PizzaActivity"
             android:exported="false" />
         <activity
-            android:name=".view.MainActivity"
+            android:name=".view.InitActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

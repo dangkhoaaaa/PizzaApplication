@@ -38,6 +38,11 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.4.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.4.0")
     //  implementation("android.arch.lifecycle:extensions:1.1.1")
+    implementation ("com.google.android.gms:play-services-maps:18.0.2")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+
+
     implementation ("io.reactivex.rxjava2:rxjava:2.2.21")
 
     implementation ("io.reactivex.rxjava2:rxandroid:2.1.1")

@@ -10,7 +10,7 @@ public class RetrofitClient {
 //https://localhost:7128/api/pizzas?current-page=1&page-size=3&sort-by-price=true&descending=true
    //https://666187b263e6a0189fea53d8.mockapi.io
     //http://192.168.1.67:3348/api/pizzas?current-page=1&page-size=3&sort-by-price=true&descending=true
-    private static final String BASE_URL = "http://192.168.64.1:3348/api/";
+    private static final String BASE_URL = "http://192.168.5.116:8000/api/";
     private static Retrofit retrofit;
 
     public static Retrofit getClient() {

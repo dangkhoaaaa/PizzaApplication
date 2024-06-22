@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ToppingModel implements Serializable {
-    @SerializedName("toppingId")
+    @SerializedName("id")
     private int toppingId;
 
     @SerializedName("name")

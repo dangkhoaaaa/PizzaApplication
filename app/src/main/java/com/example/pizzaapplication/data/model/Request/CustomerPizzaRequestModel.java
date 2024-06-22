@@ -10,11 +10,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class CustomerPizzaRequestModel {
 
-    @SerializedName("id")
-    private int id;
+    @SerializedName("quantity")
+    private int quantity;
 
-    @SerializedName("orderId")
-    private int orderId;
+
 
     @SerializedName("pizzaId")
     private int pizzaId;
@@ -30,8 +29,8 @@ public class CustomerPizzaRequestModel {
 
     // Default constructor
     public CustomerPizzaRequestModel() {
-        this.id = 0;
-        this.orderId = 0;
+
+        this.quantity = 0;
         this.pizzaId = 0;
         this.sizeId = 0;
         this.toppingId = 0;
@@ -40,9 +39,9 @@ public class CustomerPizzaRequestModel {
     }
 
     // Parameterized constructor
-    public CustomerPizzaRequestModel(int id, int orderId, int pizzaId, int sizeId, int toppingId, double price) {
-        this.id = id;
-        this.orderId = orderId;
+    public CustomerPizzaRequestModel(int quantity, int pizzaId, int sizeId, int toppingId, double price) {
+
+        this.quantity = quantity;
         this.pizzaId = pizzaId;
         this.sizeId = sizeId;
         this.toppingId = toppingId;
@@ -50,21 +49,15 @@ public class CustomerPizzaRequestModel {
     }
 
     // Getters and Setters
-    public int getId() {
-        return id;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
-    public int getOrderId() {
-        return orderId;
-    }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
 
     public int getPizzaId() {
         return pizzaId;
@@ -104,8 +97,8 @@ public class CustomerPizzaRequestModel {
     @Override
     public String toString() {
         return "CustomerPizza{" +
-                "id=" + id +
-                ", orderId=" + orderId +
+
+
                 ", pizzaId=" + pizzaId +
                 ", sizeId=" + sizeId +
                 ", toppingId=" + toppingId +

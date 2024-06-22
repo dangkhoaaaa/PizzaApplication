@@ -1,10 +1,10 @@
 package com.example.pizzaapplication.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.pizzaapplication.R;
 import com.example.pizzaapplication.adapter.SizeAdapter;
 import com.example.pizzaapplication.adapter.ToppingAdapter;
@@ -38,13 +39,22 @@ public class PizzaDetailActivity extends AppCompatActivity {
     private PizzaDetailViewModel pizzaDetailViewModel;
     private Spinner spinnerToppings, spinnerSizes;
     private TextView textViewPrice;
+    private ImageView imageViewPizza;
     private PizzaModel pizza;
     private double toppingPrice = 0;
+
+    private int sizeId = 0;
+
+    private int toppingId = 0;
     private double sizePrice = 0;
     private Button buttonAddToCart;
 
     // A static list to store cart items
     private static List<CustomerPizzaRequestModel> cart = new ArrayList<>();
+
+    // Variables to hold the selected size and topping
+    private SizeModel selectedSize;
+    private ToppingModel selectedTopping;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +64,7 @@ public class PizzaDetailActivity extends AppCompatActivity {
         TextView textViewName = findViewById(R.id.textViewPizzaName);
         TextView textViewDescription = findViewById(R.id.textViewPizzaDescription);
         textViewPrice = findViewById(R.id.textViewPizzaPrice);
+        imageViewPizza = findViewById(R.id.imageViewPizza);
         spinnerToppings = findViewById(R.id.spinnerToppings);
         spinnerSizes = findViewById(R.id.spinnerSizes);
         buttonAddToCart = findViewById(R.id.buttonAddToCart);
@@ -65,6 +76,11 @@ public class PizzaDetailActivity extends AppCompatActivity {
                 textViewName.setText(pizza.getName());
                 textViewDescription.setText(pizza.getDescription());
                 textViewPrice.setText(String.valueOf(pizza.getPrice()));
+
+                // Load the pizza image using Glide
+                Glide.with(this)
+                        .load(pizza.getImage())
+                        .into(imageViewPizza);
             }
         }
 
@@ -107,13 +123,15 @@ public class PizzaDetailActivity extends AppCompatActivity {
         spinnerToppings.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ToppingModel selectedTopping = (ToppingModel) parent.getSelectedItem();
+                selectedTopping = (ToppingModel) parent.getSelectedItem();
                 toppingPrice = (selectedTopping.getName().equals("No Topping")) ? 0 : selectedTopping.getPrice();
+                toppingId = selectedTopping.getToppingId();
                 updatePrice();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                selectedTopping = null;
                 toppingPrice = 0;
                 updatePrice();
             }
@@ -122,13 +140,15 @@ public class PizzaDetailActivity extends AppCompatActivity {
         spinnerSizes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SizeModel selectedSize = (SizeModel) parent.getSelectedItem();
+                selectedSize = (SizeModel) parent.getSelectedItem();
                 sizePrice = selectedSize.getPrice();
+                sizeId = selectedSize.getSizeId();
                 updatePrice();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                selectedSize = null;
                 sizePrice = 0;
                 updatePrice();
             }
@@ -148,22 +168,22 @@ public class PizzaDetailActivity extends AppCompatActivity {
     }
 
     private void addToCart() {
-        ToppingModel selectedTopping = (ToppingModel) spinnerToppings.getSelectedItem();
-        SizeModel selectedSize = (SizeModel) spinnerSizes.getSelectedItem();
+        if (selectedTopping != null && selectedSize != null) {
+            CustomerPizzaRequestModel customerPizza = new CustomerPizzaRequestModel();
+            customerPizza.setPizzaId(pizza.getPizzaId());
+            customerPizza.setSizeId(sizeId);
+            customerPizza.setQuantity(1);
+            customerPizza.setToppingId(toppingId);
+            customerPizza.setPrice(pizza.getPrice() + toppingPrice + sizePrice);
+            cart.add(customerPizza);
 
-        CustomerPizzaRequestModel customerPizza = new CustomerPizzaRequestModel();
-        customerPizza.setPizzaId(pizza.getPizzaId());
-        customerPizza.setSizeId(selectedSize.getSizeId());
-        customerPizza.setId(1);
-        customerPizza.setToppingId(selectedTopping.getToppingId());
-        customerPizza.setPrice( pizza.getPrice() + toppingPrice + sizePrice);
-        cart.add(customerPizza);
-
-        Toast.makeText(this, "Pizza added to cart!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Pizza added to cart!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Please select a size and topping", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static List<CustomerPizzaRequestModel> getCart() {
         return cart;
     }
-
 }

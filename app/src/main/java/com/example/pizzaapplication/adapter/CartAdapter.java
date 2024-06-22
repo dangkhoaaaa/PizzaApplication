@@ -1,4 +1,4 @@
-package com.example.pizzaapplication.view;
+package com.example.pizzaapplication.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
