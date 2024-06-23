@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,8 @@ import androidx.lifecycle.Observer;
 
 import com.example.pizzaapplication.R;
 import com.example.pizzaapplication.data.api.RetrofitClient;
+import com.example.pizzaapplication.data.model.Request.ProfileRequestModel;
+import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.ProfileResponseModel;
 import com.example.pizzaapplication.data.repository.ProfileRepository;
 import com.example.pizzaapplication.viewmodel.ProfileViewModel;
@@ -27,9 +30,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.Response;
 
 public class ProfileFragment extends Fragment {
-    private EditText tvFullName, tvMail, tvDoB, tvAddress, tvPhone;
+    private EditText tvFullName, tvDoB, tvAddress, tvPhone;
     private Button buttonSettings, changePassword, btnUpdateProfile, buttonNotifications, btnLogout;
     private CircleImageView profileImageView;
     private ProfileViewModel profileViewModel;
@@ -43,7 +50,6 @@ public class ProfileFragment extends Fragment {
 
         // Initialize UI elements
         tvFullName = view.findViewById(R.id.tvFullName);
-        tvMail = view.findViewById(R.id.tvMail);
         tvDoB = view.findViewById(R.id.tvDoB);
         tvAddress = view.findViewById(R.id.tvAdress);
         tvPhone = view.findViewById(R.id.tvPhone);
@@ -91,47 +97,16 @@ public class ProfileFragment extends Fragment {
                 editingEnabled = !editingEnabled;
 
                 if (editingEnabled) {
-                    tvFullName.setEnabled(true);
-                    tvMail.setEnabled(true);
-                    tvDoB.setEnabled(true);
-                    tvAddress.setEnabled(true);
-                    tvPhone.setEnabled(true);
-                    tvFullName.setBackgroundTintList(null);
-                    tvMail.setBackgroundTintList(null);
-                    tvDoB.setBackgroundTintList(null);
-                    tvAddress.setBackgroundTintList(null);
-                    tvPhone.setBackgroundTintList(null);
-                    Drawable background = getResources().getDrawable(R.drawable.btn_background_xanh);
-                    btnUpdateProfile.setBackground(background);
-                    tvFullName.setHint("Enter new first name");
+                    enableEditing();
 
                     // Set hints for other EditTexts
                 } else {
-                    tvFullName.setEnabled(false);
-                    tvMail.setEnabled(false);
-                    tvDoB.setEnabled(false);
-                    tvAddress.setEnabled(false);
-                    tvPhone.setEnabled(false);
-                    Drawable background = getResources().getDrawable(R.drawable.btn_background_1);
-                    btnUpdateProfile.setBackground(background);
-                    // Get white color from resources
-                    int white = getResources().getColor(R.color.White); // Assuming "white" is defined in colors.xml
-
-                    // Create ColorStateList with white as default
-                    ColorStateList whiteTintList = ColorStateList.valueOf(white);
-
-                    // Set white tint for all TextViews
-                    tvFullName.setBackgroundTintList(whiteTintList);
-                    tvMail.setBackgroundTintList(whiteTintList);
-                    tvDoB.setBackgroundTintList(whiteTintList);
-                    tvAddress.setBackgroundTintList(whiteTintList);
-                    tvPhone.setBackgroundTintList(whiteTintList);
-
-                    // Update profile information on server (optional)
+                    disableEditing();
                     updateProfileInformation();
                 }
             }
         });
+
 
 //        buttonSettings.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -172,9 +147,37 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    private void enableEditing() {
+        tvFullName.setEnabled(true);
+        tvDoB.setEnabled(true);
+        tvAddress.setEnabled(true);
+        tvPhone.setEnabled(true);
+        tvFullName.setBackgroundTintList(null);
+        tvDoB.setBackgroundTintList(null);
+        tvAddress.setBackgroundTintList(null);
+        tvPhone.setBackgroundTintList(null);
+        Drawable background = getResources().getDrawable(R.drawable.btn_background_xanh);
+        btnUpdateProfile.setBackground(background);
+        tvFullName.setHint("Enter new first name");
+    }
+
+    private void disableEditing() {
+        tvFullName.setEnabled(false);
+        tvDoB.setEnabled(false);
+        tvAddress.setEnabled(false);
+        tvPhone.setEnabled(false);
+        Drawable background = getResources().getDrawable(R.drawable.btn_background_1);
+        btnUpdateProfile.setBackground(background);
+        int white = getResources().getColor(R.color.White); // Assuming "white" is defined in colors.xml
+        ColorStateList whiteTintList = ColorStateList.valueOf(white);
+        tvFullName.setBackgroundTintList(whiteTintList);
+        tvDoB.setBackgroundTintList(whiteTintList);
+        tvAddress.setBackgroundTintList(whiteTintList);
+        tvPhone.setBackgroundTintList(whiteTintList);
+    }
+
     private void displayProfile(ProfileResponseModel profileResponseModel) {
         tvFullName.setText(profileResponseModel.getFirstName() + " " + profileResponseModel.getLastName());
-        tvMail.setText(profileResponseModel.getEmail());
         // Convert date of birth to desired format
         String dateOfBirth = profileResponseModel.getDateOfBirth();
         String formattedDoB = formatDateOfBirth(dateOfBirth);
@@ -209,20 +212,53 @@ public class ProfileFragment extends Fragment {
 
     // Method to update profile information on server (implement your logic here)
     private void updateProfileInformation() {
+        int id = 1;
         String newFullName = tvFullName.getText().toString();
-        String newEmail = tvMail.getText().toString();
+        String[] names = newFullName.split(" ");
+        String newFirstName = names[0];
+        String newLastName = names.length > 1 ? names[1] : "";
         String newDoB = tvDoB.getText().toString();
         String newAddress = tvAddress.getText().toString();
         String newPhone = tvPhone.getText().toString();
 
         // Make API call to update profile using new information
         // ...
+        ProfileRequestModel profileRequestModel = new ProfileRequestModel(
+                id, newFirstName, newLastName, newDoB, newAddress, newPhone, null
+        );
 
-        // After successful update, update UI elements with new information
+        // Convert profile picture to MultipartBody.Part
+        MultipartBody.Part profilePic = null;
+//        MultipartBody.Part profilePic = MultipartBody.Part.createFormData("profile_pic", "");
+
+
+        profileViewModel.updateProfile(profileRequestModel, profilePic);
+        // Observe the update profile live data for success/failure
+        profileViewModel.getUpdateSuccess().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean updateSuccess) {
+                if (updateSuccess != null && updateSuccess) {
+                    showSuccessToast();
+                    updateUiElementsWithNewInformation(newFullName,newDoB,newAddress,newPhone);
+                } else {
+                    // Handle update failure (optional: show error toast)
+                }
+            }
+        });
+    }
+
+    private void showSuccessToast() {
+        String successMessage = getString(R.string.profile_update_success); // Use string resource for localization
+        Toast.makeText(requireContext(), successMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateUiElementsWithNewInformation(String newFullName,  String newDoB, String newAddress, String newPhone) {
+        // Update UI elements with new information as in previous code
         tvFullName.setText(newFullName);
-        tvMail.setText(newEmail);
         tvDoB.setText(newDoB);
         tvAddress.setText(newAddress);
         tvPhone.setText(newPhone);
     }
+
+
 }

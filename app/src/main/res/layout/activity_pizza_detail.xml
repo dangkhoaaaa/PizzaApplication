@@ -123,22 +123,43 @@
                         android:layout_height="@dimen/xxxl" />
 
                     <TextView
+                        android:id="@+id/textViewPizzaPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:id="@+id/textViewPizzaPrice"
                         android:text="$75.00"
                         android:textAlignment="textStart"
                         android:textSize="18sp" />
+
                     <View
                         android:layout_width="0dp"
                         android:layout_height="@dimen/xxl" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/spinnerToppings"
+                        android:text="Select topping"
+                        android:textColor="@color/LightGrey"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        />
+
                     <Spinner
                         android:id="@+id/spinnerToppings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/textViewPizzaPrice"
                         android:layout_marginBottom="16dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/spinnerToppings"
+                        android:text="Select size"
+                        android:textColor="@color/LightGrey"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        />
 
                     <Spinner
                         android:id="@+id/spinnerSizes"
@@ -157,12 +178,12 @@
                         android:layout_below="@id/spinnerSizes"
                         android:layout_marginTop="16dp"
                         android:layout_centerHorizontal="true"
-                        android:text="Add to Cart" />
+                        android:backgroundTint="@color/Green"
+                        android:text="Add to Cart"/>
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="@dimen/xxxl" />
-
 
                 </LinearLayout>
             </ScrollView>

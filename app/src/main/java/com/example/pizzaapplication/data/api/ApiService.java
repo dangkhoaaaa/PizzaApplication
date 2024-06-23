@@ -2,6 +2,7 @@ package com.example.pizzaapplication.data.api;
 
 import com.example.pizzaapplication.data.model.Pizza;
 import com.example.pizzaapplication.data.model.Request.CustomerOrderRequestModel;
+import com.example.pizzaapplication.data.model.Request.ProfileRequestModel;
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
 import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
@@ -14,11 +15,16 @@ import com.example.pizzaapplication.data.model.User;
 
 import java.util.List;
 import io.reactivex.Single;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 public interface ApiService {
 
@@ -44,9 +50,15 @@ public interface ApiService {
     @GET("users/profile?id=1")
     Call<ProfileResponseModel> getProfile();
 
-    //update profile
-//    @PUT("users/profile?id=1")
-//    Call<>
-
-
+    @Multipart
+    @PUT("users/profile")
+    Call<ApiResponse> updateProfile(
+            @Part("id") RequestBody id,
+            @Part("first_name") RequestBody firstName,
+            @Part("last_name") RequestBody lastName,
+            @Part("date_of_birth") RequestBody dateOfBirth,
+            @Part("address") RequestBody address,
+            @Part("phone") RequestBody phone,
+            @Part MultipartBody.Part profilePic
+    );
 }

@@ -7,8 +7,6 @@ public class CustomerDrinkRequestModel {
     @SerializedName("quantity")
     private int quantity;
 
-
-
     @SerializedName("drinkId")
     private int drinkId;
 
