@@ -3,12 +3,15 @@ package com.example.pizzaapplication.data.api;
 import com.example.pizzaapplication.data.model.Pizza;
 import com.example.pizzaapplication.data.model.Request.CustomerOrderRequestModel;
 import com.example.pizzaapplication.data.model.Request.ProfileRequestModel;
+import com.example.pizzaapplication.data.model.Request.RegisterRequestModel;
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
 import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
 import com.example.pizzaapplication.data.model.Response.ProfileResponseModel;
+import com.example.pizzaapplication.data.model.Response.RegisterResponse;
 import com.example.pizzaapplication.data.model.Response.SizeModel;
 import com.example.pizzaapplication.data.model.Response.SizeResponseModel;
+import com.example.pizzaapplication.data.model.Response.TokenResponse;
 import com.example.pizzaapplication.data.model.Response.ToppingModel;
 import com.example.pizzaapplication.data.model.Response.ToppingResponseModel;
 import com.example.pizzaapplication.data.model.User;
@@ -19,6 +22,8 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -61,4 +66,14 @@ public interface ApiService {
             @Part("phone") RequestBody phone,
             @Part MultipartBody.Part profilePic
     );
+
+    @FormUrlEncoded
+    @POST("users/login")
+    Call<TokenResponse> login(
+            @Field("email") String email,
+            @Field("password") String password
+    );
+
+    @POST("register")
+    Call<RegisterResponse> register(@Body RegisterRequestModel user);
 }
