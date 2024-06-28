@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.pizzaapplication.R;
 
+import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.view.PizzaFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        DataLocalManager.init(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -30,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                //check token
+                //check token
+                if (DataLocalManager.getInstance().getToken() != null) {
+                    Toast.makeText(MainActivity.this, "TOKEN: " + DataLocalManager.getInstance().getToken(), Toast.LENGTH_SHORT).show();
+                }
                 int itemId = item.getItemId();
                 if (itemId == R.id.navigation_pizza) {
                     loadFragment(new PizzaFragment());

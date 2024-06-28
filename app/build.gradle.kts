@@ -44,6 +44,7 @@ dependencies {
     //   implementation("com.android.volley:volley:1.2.1")
     implementation("com.github.momo-wallet:mobile-sdk:1.0.7")
 
+    implementation ("com.auth0:java-jwt:4.0.0")
 
     implementation ("io.reactivex.rxjava2:rxjava:2.2.21")
 
