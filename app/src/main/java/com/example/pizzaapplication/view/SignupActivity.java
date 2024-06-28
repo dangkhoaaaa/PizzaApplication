@@ -10,6 +10,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pizzaapplication.R;
+import com.example.pizzaapplication.data.api.ApiService;
+import com.example.pizzaapplication.data.api.RetrofitClient;
+import com.example.pizzaapplication.data.model.Request.RegisterRequestModel;
+import com.example.pizzaapplication.data.model.Response.RegisterResponse;
+import com.example.pizzaapplication.data.repository.UserRepository;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -49,18 +54,31 @@ public class SignupActivity extends AppCompatActivity {
                 } else if (!password.equals(confirmPassword)) {
                     Toast.makeText(SignupActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                 } else {
+                    RegisterRequestModel user = new RegisterRequestModel(name, email, password, phone, address);
                     // Handle signup logic here
-                    registerUser(name, email, password, phone, address);
+                    registerUser(user);
                 }
             }
         });
     }
 
-    private void registerUser(String name, String email, String password, String phone, String address) {
+    private void registerUser(RegisterRequestModel user) {
         // Thực hiện đăng ký người dùng với các thông tin đã nhập
-        // Giả sử đăng ký thành công, chuyển sang MainActivity
-        Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        ApiService apiService = RetrofitClient.getApiService();
+        UserRepository userRepository = new UserRepository(apiService);
+        userRepository.registerUser(user, new UserRepository.RegisterCallback() {
+            @Override
+            public void onSuccess(RegisterResponse registerResponse) {
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(SignupActivity.this, "Signup failed: " + message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

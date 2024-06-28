@@ -11,6 +11,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pizzaapplication.R;
+import com.example.pizzaapplication.data.api.ApiService;
+import com.example.pizzaapplication.data.api.RetrofitClient;
+import com.example.pizzaapplication.data.model.Response.TokenResponse;
+import com.example.pizzaapplication.data.repository.UserRepository;
+import com.example.pizzaapplication.share.DataLocalManager;
+import com.example.pizzaapplication.utils.JwtUtils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -65,10 +71,31 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String email, String password) {
-        // Thực hiện đăng nhập với email và password
-        // Giả sử đăng nhập thành công, chuyển sang MainActivity
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        ApiService apiService = RetrofitClient.getApiService();
+        UserRepository userRepository = new UserRepository(apiService);
+
+        // Thực hiện gọi API login
+        userRepository.login(email, password, new UserRepository.LoginCallback() {
+            @Override
+            public void onSuccess(TokenResponse tokenResponse) {
+                // Đăng nhập thành công, lưu token vào SharedPreferences (ví dụ)
+                String token = tokenResponse.getToken();
+                String userId = JwtUtils.getUserId(token);
+                DataLocalManager.setToken(token);
+                DataLocalManager.setUserId(userId);
+
+
+                // Chuyển sang MainActivity
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onError(String message) {
+                // Xử lý lỗi đăng nhập
+                Toast.makeText(LoginActivity.this, "Đăng nhập thất bại: " + message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
