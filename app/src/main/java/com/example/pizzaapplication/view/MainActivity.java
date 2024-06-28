@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        DataLocalManager.init(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -33,8 +33,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 //check token
-                if(DataLocalManager.getToken() != null) {
-                    Toast.makeText(MainActivity.this, "TOKEN: " + DataLocalManager.getToken(), Toast.LENGTH_SHORT).show();
+                //check token
+                if (DataLocalManager.getInstance().getToken() != null) {
+                    Toast.makeText(MainActivity.this, "TOKEN: " + DataLocalManager.getInstance().getToken(), Toast.LENGTH_SHORT).show();
                 }
                 int itemId = item.getItemId();
                 if (itemId == R.id.navigation_pizza) {

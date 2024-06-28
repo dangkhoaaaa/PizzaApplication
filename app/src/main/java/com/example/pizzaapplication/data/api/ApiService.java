@@ -74,6 +74,6 @@ public interface ApiService {
             @Field("password") String password
     );
 
-    @POST("register")
+    @POST("users/register")
     Call<RegisterResponse> register(@Body RegisterRequestModel user);
 }
