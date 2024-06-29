@@ -107,15 +107,15 @@
                                 android:textStyle="bold" />
 
                             <EditText
-                                android:enabled="false"
-                                android:backgroundTint="@color/White"
                                 android:id="@+id/tvMail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="lionfischer@gmail.com"
+                                android:backgroundTint="@color/White"
+                                android:enabled="false"
                                 android:gravity="end"
-                                android:textSize="18sp"/>
+                                android:text="lionfischer@gmail.com"
+                                android:textSize="18sp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -237,23 +237,23 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-<!--                    <androidx.appcompat.widget.AppCompatButton-->
-<!--                        android:id="@+id/button4"-->
-<!--                        style="@android:style/Widget.Button"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="60dp"-->
-<!--                        android:layout_marginStart="32dp"-->
-<!--                        android:layout_marginTop="10dp"-->
-<!--                        android:layout_marginEnd="32dp"-->
-<!--                        android:layout_marginBottom="10dp"-->
-<!--                        android:background="@drawable/btn_background_1"-->
-<!--                        android:drawableStart="@drawable/ic_4"-->
-<!--                        android:drawablePadding="20dp"-->
-<!--                        android:paddingStart="20dp"-->
-<!--                        android:text="Notification"-->
-<!--                        android:textAlignment="viewStart"-->
-<!--                        android:textSize="18sp"-->
-<!--                        android:textStyle="bold" />-->
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnOrderHistory"
+                        style="@android:style/Widget.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/btn_background_1"
+                        android:drawableStart="@drawable/ic_4"
+                        android:drawablePadding="20dp"
+                        android:paddingStart="20dp"
+                        android:text="Order History"
+                        android:textAlignment="viewStart"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnLogout"

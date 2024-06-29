@@ -6,6 +6,7 @@ import com.example.pizzaapplication.data.model.Request.ProfileRequestModel;
 import com.example.pizzaapplication.data.model.Request.RegisterRequestModel;
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
+import com.example.pizzaapplication.data.model.Response.OrderHistoryResponseModel;
 import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
 import com.example.pizzaapplication.data.model.Response.ProfileResponseModel;
 import com.example.pizzaapplication.data.model.Response.RegisterResponse;
@@ -31,6 +32,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -53,15 +55,14 @@ public interface ApiService {
     Call<ApiResponse<Integer>> createOrder(@Body CustomerOrderRequestModel orderRequest);
 
     //Get profile
-    @GET("users/profile?id=1")
-    Call<ProfileResponseModel> getProfile();
+    @GET("users/profile")
+    Call<ProfileResponseModel> getProfile(@Query("id") String userId);
 
     @Multipart
     @PUT("users/profile")
     Call<ApiResponse> updateProfile(
             @Part("id") RequestBody id,
-            @Part("first_name") RequestBody firstName,
-            @Part("last_name") RequestBody lastName,
+            @Part("name") RequestBody name,
             @Part("date_of_birth") RequestBody dateOfBirth,
             @Part("address") RequestBody address,
             @Part("phone") RequestBody phone,
@@ -75,6 +76,11 @@ public interface ApiService {
             @Field("password") String password
     );
 
+  
+    //get  orderhis
+    @GET("cus-orders/history/{userId}")
+    Call<List<OrderHistoryResponseModel>> getOrderHistory(@Path("userId") String userId);
+  
     @FormUrlEncoded
     @POST("users/register")
     Call<RegisterResponse> register(
@@ -84,4 +90,5 @@ public interface ApiService {
             @Field("phone") String phone,
             @Field("address") String address
     );
+
 }

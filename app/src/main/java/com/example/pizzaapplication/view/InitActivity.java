@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pizzaapplication.R;
+import com.example.pizzaapplication.share.DataLocalManager;
 
 public class InitActivity extends AppCompatActivity {
 
@@ -21,6 +23,12 @@ public class InitActivity extends AppCompatActivity {
 
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonGuest = findViewById(R.id.buttonGuest);
+
+        String token = DataLocalManager.getInstance().getToken();
+        if (!token.isEmpty()) {
+            Intent intent = new Intent(InitActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
