@@ -39,7 +39,7 @@ import okhttp3.Response;
 
 public class ProfileFragment extends Fragment {
     private EditText tvFullName, tvDoB, tvAddress, tvPhone, tvMail;
-    private Button buttonSettings, changePassword, btnUpdateProfile, buttonNotifications, btnLogout;
+    private Button buttonSettings, changePassword, btnUpdateProfile, btnOrderHistory, btnLogout;
     private CircleImageView profileImageView;
     private ProfileViewModel profileViewModel;
     private boolean editingEnabled = false;
@@ -58,7 +58,7 @@ public class ProfileFragment extends Fragment {
         tvMail = view.findViewById(R.id.tvMail);
 //        buttonSettings = view.findViewById(R.id.buttonSettings);
         btnUpdateProfile = view.findViewById(R.id.btnUpdateProfile);
-//        buttonNotifications = view.findViewById(R.id.buttonNotifications);
+        btnOrderHistory = view.findViewById(R.id.btnOrderHistory);
         btnLogout = view.findViewById(R.id.btnLogout);
 //        profileImageView = view.findViewById(R.id.profileImageView);
 
@@ -121,14 +121,14 @@ public class ProfileFragment extends Fragment {
 //        });
 //
 //
-//        buttonNotifications.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Handle notification button click
-//                Intent intent = new Intent(getActivity(), NotificationSettingsActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        btnOrderHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle order history button click
+                Intent intent = new Intent(getActivity(), OrderHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -6,6 +6,7 @@ import com.example.pizzaapplication.data.model.Request.ProfileRequestModel;
 import com.example.pizzaapplication.data.model.Request.RegisterRequestModel;
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
+import com.example.pizzaapplication.data.model.Response.OrderHistoryResponseModel;
 import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
 import com.example.pizzaapplication.data.model.Response.ProfileResponseModel;
 import com.example.pizzaapplication.data.model.Response.RegisterResponse;
@@ -76,4 +77,8 @@ public interface ApiService {
 
     @POST("users/register")
     Call<RegisterResponse> register(@Body RegisterRequestModel user);
+
+    //get  orderhis
+    @GET("cus-orders/history/{userId}")
+    Call<List<OrderHistoryResponseModel>> getOrderHistory(@Path("userId") String userId);
 }
