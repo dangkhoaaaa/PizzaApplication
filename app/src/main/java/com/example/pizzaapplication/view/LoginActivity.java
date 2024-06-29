@@ -17,6 +17,9 @@ import com.example.pizzaapplication.data.model.Response.TokenResponse;
 import com.example.pizzaapplication.data.repository.UserRepository;
 import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.utils.JwtUtils;
+import com.example.pizzaapplication.view.admin.AdminActivity;
+
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -81,14 +84,23 @@ public class LoginActivity extends AppCompatActivity {
                 // Đăng nhập thành công, lưu token vào SharedPreferences (ví dụ)
                 String token = tokenResponse.getToken();
                 String userId = JwtUtils.getUserId(token);
-                DataLocalManager.setToken(token);
-                DataLocalManager.setUserId(userId);
+                String role = JwtUtils.getRole(token);
+//                DataLocalManager.setToken(token);
+         //       DataLocalManager.setUserId(userId);
+                if(Objects.equals(role, "1")){
+                    Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    DataLocalManager.setToken(token);
+                    DataLocalManager.setUserId(userId);
+                    // Chuyển sang MainActivity
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
 
 
-                // Chuyển sang MainActivity
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
             }
 
             @Override

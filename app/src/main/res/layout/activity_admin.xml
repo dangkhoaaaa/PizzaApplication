@@ -1,0 +1,97 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white"
+    tools:context=".view.admin.AdminActivity">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="24dp">
+
+        <!-- Logo -->
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/pizza_init"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Admin Logo"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical" />
+
+        <!-- Admin Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Admin"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/Black" />
+    </LinearLayout>
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:spacing="16dp">
+
+        <Button
+            android:id="@+id/buttonEditPizza"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Pizza"
+            android:textAllCaps="false"
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/buttonViewDrinks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Drinks"
+            android:textAllCaps="false"
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/buttonViewUsers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Users"
+            android:textAllCaps="false"
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/buttonViewDashboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Dashboard"
+            android:textAllCaps="false"
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/buttonChatWithCustomers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chat with Customers"
+            android:textAllCaps="false"
+            android:background="@drawable/button_background"
+            android:textColor="@color/white"
+            android:layout_marginBottom="16dp" />
+    </LinearLayout>
+</LinearLayout>

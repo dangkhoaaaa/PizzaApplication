@@ -1,5 +1,6 @@
 package com.example.pizzaapplication.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.example.pizzaapplication.data.model.Request.CustomerDrinkRequestModel
 import com.example.pizzaapplication.data.model.Response.DrinkModel;
 import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
 import com.example.pizzaapplication.data.repository.DrinkRepository;
+import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.viewmodel.DrinkViewModel;
 
 import java.util.ArrayList;
@@ -49,10 +51,15 @@ public class DrinkFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         drinkAdapter = new DrinkAdapter();
         recyclerView.setAdapter(drinkAdapter);
+        String token = DataLocalManager.getInstance().getToken();
+        if (token == null) {
+            // Redirect to login activity if no token is found
+
+        }
 
         // Initialize DrinkRepository and DrinkViewModel
         DrinkRepository drinkRepository = new DrinkRepository(RetrofitClient.getApiService());
-        drinkViewModel = new DrinkViewModel(drinkRepository);
+        drinkViewModel = new DrinkViewModel(drinkRepository,token);
 
         // Observe LiveData from DrinkViewModel
         LiveData<DrinkResponseModel> liveDataDrinks = drinkViewModel.getDrinks();

@@ -14,8 +14,8 @@ public class DrinkRepository {
         this.apiService = apiService;
     }
 
-    public void getDrinks(Callback<DrinkResponseModel> callback) {
-        Call<DrinkResponseModel> call = apiService.getDrinks();
+    public void getDrinks(Callback<DrinkResponseModel> callback, String authToken) {
+        Call<DrinkResponseModel> call = apiService.getDrinks(authToken);
         call.enqueue(callback);
     }
 }
