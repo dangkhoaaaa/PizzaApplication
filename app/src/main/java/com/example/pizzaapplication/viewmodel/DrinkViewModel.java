@@ -16,17 +16,18 @@ public class DrinkViewModel extends ViewModel {
     private MutableLiveData<DrinkResponseModel> drinks;
     private DrinkRepository drinkRepository;
 
-    public DrinkViewModel(DrinkRepository drinkRepository) {
+    public DrinkViewModel(DrinkRepository drinkRepository,String au) {
         drinks = new MutableLiveData<>();
         this.drinkRepository = drinkRepository;
-        fetchDrinks();
+        fetchDrinks( au);
     }
 
     public LiveData<DrinkResponseModel> getDrinks() {
         return drinks;
     }
 
-    private void fetchDrinks() {
+    private void fetchDrinks(String authToken1) {
+        String authToken = "Bearer "+authToken1; // Replace with actual token
         drinkRepository.getDrinks(new Callback<DrinkResponseModel>() {
             @Override
             public void onResponse(Call<DrinkResponseModel> call, Response<DrinkResponseModel> response) {
@@ -39,6 +40,6 @@ public class DrinkViewModel extends ViewModel {
             public void onFailure(Call<DrinkResponseModel> call, Throwable t) {
                 // Handle failure
             }
-        });
+        }, authToken);
     }
 }
