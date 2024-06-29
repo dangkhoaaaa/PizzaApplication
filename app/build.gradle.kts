@@ -49,7 +49,7 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.4.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
-
+    implementation("com.squareup.picasso:picasso:2.71828")
     implementation ("io.reactivex.rxjava2:rxandroid:2.1.1")
     implementation("androidx.lifecycle:lifecycle-livedata:2.5.1")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
