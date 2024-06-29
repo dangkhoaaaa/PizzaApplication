@@ -1,5 +1,6 @@
 package com.example.pizzaapplication.view;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,8 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.pizzaapplication.R;
 import com.example.pizzaapplication.adapter.PizzaAdapter;
 import com.example.pizzaapplication.data.api.RetrofitClient;
@@ -23,6 +26,7 @@ import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
 import com.example.pizzaapplication.data.repository.PizzaRepository;
 import com.example.pizzaapplication.viewmodel.PizzaViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PizzaFragment extends Fragment {
@@ -31,6 +35,8 @@ public class PizzaFragment extends Fragment {
     private PizzaAdapter pizzaAdapter;
     private PizzaViewModel pizzaViewModel;
     private static final String TAG = "PizzaFragment";
+    private ImageSlider imageSlider;
+    private List<SlideModel> imageList;
 
     @Nullable
     @Override
@@ -43,9 +49,24 @@ public class PizzaFragment extends Fragment {
         pizzaAdapter = new PizzaAdapter();
         recyclerView.setAdapter(pizzaAdapter);
 
+        // Initialize ImageSlider
+        imageSlider = view.findViewById(R.id.imageSlideshow);
+        imageList = new ArrayList<>();
+
+        // Initialize imageList with drawable resource IDs
+        imageList.add(new SlideModel(R.drawable.pizza_banner_1, null));  // Replace with your drawable resource names
+        imageList.add(new SlideModel(R.drawable.pizza_banner_2, null));
+        imageList.add(new SlideModel(R.drawable.pizza_banner_3,null));
+        imageList.add(new SlideModel(R.drawable.pizza_banner_4,null));
+
+        imageSlider.setImageList(imageList);
+
         // Initialize PizzaRepository and PizzaViewModel
         PizzaRepository pizzaRepository = new PizzaRepository(RetrofitClient.getApiService());
         pizzaViewModel = new PizzaViewModel(pizzaRepository);
+
+
+
 
         // Observe LiveData from PizzaViewModel
         LiveData<PizzaResponseModel> liveDataPizzas = pizzaViewModel.getPizzas();

@@ -6,11 +6,8 @@ public class ProfileRequestModel {
     @SerializedName("id")
     private int id;
 
-    @SerializedName("first_name")
-    private String firstName;
-
-    @SerializedName("last_name")
-    private String lastName;
+    @SerializedName("name")
+    private String name;
 
     @SerializedName("date_of_birth")
     private String dateOfBirth;
@@ -27,10 +24,9 @@ public class ProfileRequestModel {
     public ProfileRequestModel() {
     }
 
-    public ProfileRequestModel(int id, String firstName, String lastName, String dateOfBirth, String address, String phone, String profilePic) {
+    public ProfileRequestModel(int id, String name, String dateOfBirth, String address, String phone, String profilePic) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.phone = phone;
@@ -45,20 +41,12 @@ public class ProfileRequestModel {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDateOfBirth() {
@@ -97,8 +85,7 @@ public class ProfileRequestModel {
     public String toString() {
         return "ProfileRequestModel{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", name='" + name + '\'' +
                 ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +

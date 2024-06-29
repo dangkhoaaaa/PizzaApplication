@@ -1,11 +1,13 @@
 package com.example.pizzaapplication.view;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,7 +50,15 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(new MapFragment());
                     return true;
                 } else if (itemId == R.id.navigation_account) {
-                    loadFragment(new ProfileFragment());
+//                    loadFragment(new ProfileFragment());
+//                    return true;
+                    String token = DataLocalManager.getInstance().getToken();
+                    if (token != null && !token.isEmpty()) {
+                        loadFragment(new ProfileFragment());
+                    } else {
+                        // Show login prompt if token is missing or empty
+                        showLoginPrompt();
+                    }
                     return true;
                 }
                 return false;
@@ -89,5 +99,25 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private void showLoginPrompt() {
+        new AlertDialog.Builder(this)
+                .setTitle("Login Required")
+                .setMessage("You need to log in to access this section. Do you want to log in now?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 }

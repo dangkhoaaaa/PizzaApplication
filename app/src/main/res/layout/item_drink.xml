@@ -1,5 +1,6 @@
  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp">
@@ -11,6 +12,9 @@
         android:scaleType="centerCrop"
         android:src="@drawable/temp_pizza"
         android:layout_marginBottom="8dp"/>
+     <View
+         android:layout_width="0dp"
+         android:layout_height="@dimen/xl" />
     <TextView
         android:id="@+id/textViewDrinkName"
         android:layout_width="wrap_content"
@@ -32,6 +36,7 @@
         android:layout_height="wrap_content"
         android:text="Drink Price"
         android:textSize="14sp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,6 +65,47 @@
             android:layout_height="wrap_content"
             android:text="+" />
     </LinearLayout>
+<!--     <FrameLayout-->
+<!--         android:layout_width="135dp"-->
+<!--         android:layout_height="45dp"-->
+<!--         android:layout_gravity="start"-->
+<!--         android:background="@drawable/bg_btn_increase"-->
+<!--         android:orientation="horizontal">-->
+
+<!--         <ImageButton-->
+<!--             android:id="@+id/buttonDecreaseQuantity"-->
+<!--             android:layout_width="wrap_content"-->
+<!--             android:layout_height="wrap_content"-->
+<!--             android:layout_gravity="center|left"-->
+<!--             android:layout_marginLeft="@dimen/xxl"-->
+<!--             android:background="@android:color/transparent"-->
+<!--             android:padding="@dimen/xl"-->
+<!--             android:src="@drawable/ic_remove" />-->
+
+<!--         <TextView-->
+<!--             android:id="@+id/textViewQuantity"-->
+<!--             android:layout_width="wrap_content"-->
+<!--             android:layout_height="wrap_content"-->
+<!--             android:layout_gravity="center"-->
+<!--             android:layout_marginRight="@dimen/xl"-->
+<!--             android:text="1"-->
+<!--             android:textColor="@color/White"-->
+<!--             android:textSize="24sp" />-->
+
+<!--         <ImageButton-->
+<!--             android:id="@+id/buttonIncreaseQuantity"-->
+<!--             android:layout_width="wrap_content"-->
+<!--             android:layout_height="wrap_content"-->
+<!--             android:layout_gravity="center|right"-->
+<!--             android:layout_marginRight="@dimen/xxl"-->
+<!--             android:background="@drawable/bg_increase"-->
+<!--             android:padding="@dimen/xl"-->
+<!--             android:src="@drawable/ic_add_24"-->
+<!--             android:tint="@color/Green"-->
+<!--             tools:ignore="UseAppTint" />-->
+
+<!--     </FrameLayout>-->
+
     <Button
         android:id="@+id/buttonAddToCart"
         android:layout_width="wrap_content"
