@@ -26,6 +26,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -48,7 +49,7 @@ public interface ApiService {
     Call<SizeResponseModel> getSizes();
 
     @GET("drinks?current-page=1&page-size=3&sort-by-price=true&descending=true")
-    Call<DrinkResponseModel> getDrinks();
+    Call<DrinkResponseModel> getDrinks(@Header("Authorization") String authToken);
 
     @POST("cus-orders")
     Call<ApiResponse<Integer>> createOrder(@Body CustomerOrderRequestModel orderRequest);
@@ -75,10 +76,19 @@ public interface ApiService {
             @Field("password") String password
     );
 
-    @POST("users/register")
-    Call<RegisterResponse> register(@Body RegisterRequestModel user);
-
+  
     //get  orderhis
     @GET("cus-orders/history/{userId}")
     Call<List<OrderHistoryResponseModel>> getOrderHistory(@Path("userId") String userId);
+  
+    @FormUrlEncoded
+    @POST("users/register")
+    Call<RegisterResponse> register(
+            @Field("name") String name,
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("phone") String phone,
+            @Field("address") String address
+    );
+
 }

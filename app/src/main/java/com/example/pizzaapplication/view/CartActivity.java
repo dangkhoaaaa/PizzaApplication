@@ -169,7 +169,7 @@ public class CartActivity extends AppCompatActivity {
         // client Required
         eventValue.put("merchantname", merchantName); // Tên đối tác
         eventValue.put("merchantcode", merchantCode); // Mã đối tác
-        eventValue.put("amount", fee); // Kiểu integer
+        eventValue.put("amount", amount); // Kiểu integer
         eventValue.put("orderId", String.valueOf(customerOrderId)); // unique id cho Bill order
         eventValue.put("orderLabel", "Mã đơn hàng"); // gán nhãn
 

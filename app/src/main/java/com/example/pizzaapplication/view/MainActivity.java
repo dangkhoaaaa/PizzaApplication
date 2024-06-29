@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_notification) {
             // Xử lý khi click vào chuông thông báo
+            Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_cart) {
             // Xử lý khi click vào biểu tượng giỏ hàng

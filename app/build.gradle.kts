@@ -44,10 +44,11 @@ dependencies {
 
     //   implementation("com.android.volley:volley:1.2.1")
     implementation("com.github.momo-wallet:mobile-sdk:1.0.7")
-
+    implementation("io.socket:socket.io-client:2.0.0")
     implementation ("com.auth0:java-jwt:4.0.0")
 
-    implementation ("io.reactivex.rxjava2:rxjava:2.2.21")
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.4.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     implementation ("io.reactivex.rxjava2:rxandroid:2.1.1")
     implementation("androidx.lifecycle:lifecycle-livedata:2.5.1")
