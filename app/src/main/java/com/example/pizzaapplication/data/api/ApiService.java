@@ -74,6 +74,13 @@ public interface ApiService {
             @Field("password") String password
     );
 
+    @FormUrlEncoded
     @POST("users/register")
-    Call<RegisterResponse> register(@Body RegisterRequestModel user);
+    Call<RegisterResponse> register(
+            @Field("name") String name,
+            @Field("email") String email,
+            @Field("password") String password,
+            @Field("phone") String phone,
+            @Field("address") String address
+    );
 }

@@ -47,7 +47,7 @@ public class UserRepository {
     }
 
     public void registerUser(RegisterRequestModel user, final RegisterCallback callback) {
-        Call<RegisterResponse> call = apiService.register(user);
+        Call<RegisterResponse> call = apiService.register(user.getName(), user.getEmail(), user.getPassword(), user.getPhone(), user.getAddress());
         call.enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
