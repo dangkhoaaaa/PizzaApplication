@@ -1,5 +1,6 @@
 package com.example.pizzaapplication.view;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.example.pizzaapplication.data.model.Request.ProfileRequestModel;
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.ProfileResponseModel;
 import com.example.pizzaapplication.data.repository.ProfileRepository;
+import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.viewmodel.ProfileViewModel;
 
 import java.text.ParseException;
@@ -36,7 +38,7 @@ import okhttp3.MultipartBody;
 import okhttp3.Response;
 
 public class ProfileFragment extends Fragment {
-    private EditText tvFullName, tvDoB, tvAddress, tvPhone;
+    private EditText tvFullName, tvDoB, tvAddress, tvPhone, tvMail;
     private Button buttonSettings, changePassword, btnUpdateProfile, buttonNotifications, btnLogout;
     private CircleImageView profileImageView;
     private ProfileViewModel profileViewModel;
@@ -53,6 +55,7 @@ public class ProfileFragment extends Fragment {
         tvDoB = view.findViewById(R.id.tvDoB);
         tvAddress = view.findViewById(R.id.tvAdress);
         tvPhone = view.findViewById(R.id.tvPhone);
+        tvMail = view.findViewById(R.id.tvMail);
 //        buttonSettings = view.findViewById(R.id.buttonSettings);
         btnUpdateProfile = view.findViewById(R.id.btnUpdateProfile);
 //        buttonNotifications = view.findViewById(R.id.buttonNotifications);
@@ -127,23 +130,19 @@ public class ProfileFragment extends Fragment {
 //            }
 //        });
 
-//        btnLogout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Clear user data
-//                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.clear();
-//                editor.apply();
-//
-//                // Navigate to login activity
-//                Intent intent = new Intent(getActivity(), LoginActivity.class);
-//                startActivity(intent);
-//
-//                // Optionally, finish the current activity to prevent back navigation
-//                getActivity().finish();
-//            }
-//        });
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Clear user data
+                DataLocalManager.removeToken();
+                DataLocalManager.setUserId("");
+
+                // Navigate to login activity
+                Intent intent = new Intent(getActivity(), InitActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Clear back stack
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
@@ -177,13 +176,15 @@ public class ProfileFragment extends Fragment {
     }
 
     private void displayProfile(ProfileResponseModel profileResponseModel) {
-        tvFullName.setText(profileResponseModel.getFirstName() + " " + profileResponseModel.getLastName());
+        tvFullName.setText(profileResponseModel.getName());
         // Convert date of birth to desired format
+
         String dateOfBirth = profileResponseModel.getDateOfBirth();
         String formattedDoB = formatDateOfBirth(dateOfBirth);
         tvDoB.setText(formattedDoB);
         tvAddress.setText(profileResponseModel.getAddress());
         tvPhone.setText(profileResponseModel.getPhone());
+        tvMail.setText(profileResponseModel.getEmail());
     }
 
     private String formatDateOfBirth(String dateOfBirth) {
@@ -207,24 +208,27 @@ public class ProfileFragment extends Fragment {
 
 
     private void logProfile(ProfileResponseModel profileResponseModel) {
-            Log.d(TAG, "Name: " + profileResponseModel.getFirstName() + ", lastname: " + profileResponseModel.getLastName());
+            Log.d(TAG, "Name: " + profileResponseModel.getName());
     }
 
     // Method to update profile information on server (implement your logic here)
     private void updateProfileInformation() {
-        int id = 1;
+        //convert string to integer
+        int userId = Integer.parseInt(DataLocalManager.getUserId());
         String newFullName = tvFullName.getText().toString();
-        String[] names = newFullName.split(" ");
-        String newFirstName = names[0];
-        String newLastName = names.length > 1 ? names[1] : "";
         String newDoB = tvDoB.getText().toString();
         String newAddress = tvAddress.getText().toString();
         String newPhone = tvPhone.getText().toString();
 
+        // Phone number validation
+        if (!isValidPhoneNumber(newPhone)) {
+            Toast.makeText(requireContext(), "Invalid phone number format. Please enter a 10-digit number starting with '0'", Toast.LENGTH_SHORT).show();
+            return; // Prevent update if phone number is invalid
+        }
         // Make API call to update profile using new information
         // ...
         ProfileRequestModel profileRequestModel = new ProfileRequestModel(
-                id, newFirstName, newLastName, newDoB, newAddress, newPhone, null
+                userId, newFullName, newDoB, newAddress, newPhone, null
         );
 
         // Convert profile picture to MultipartBody.Part
@@ -251,6 +255,13 @@ public class ProfileFragment extends Fragment {
         String successMessage = getString(R.string.profile_update_success); // Use string resource for localization
         Toast.makeText(requireContext(), successMessage, Toast.LENGTH_SHORT).show();
     }
+
+    private boolean isValidPhoneNumber(String phone) {
+        // Improved phone number validation using regex
+        String phoneRegex = "^0[0-9]{9}$";
+        return phone.matches(phoneRegex);
+    }
+
 
     private void updateUiElementsWithNewInformation(String newFullName,  String newDoB, String newAddress, String newPhone) {
         // Update UI elements with new information as in previous code

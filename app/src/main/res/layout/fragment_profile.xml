@@ -107,15 +107,15 @@
                                 android:textStyle="bold" />
 
                             <EditText
-                                android:enabled="false"
-                                android:backgroundTint="@color/White"
                                 android:id="@+id/tvMail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="lionfischer@gmail.com"
+                                android:backgroundTint="@color/White"
+                                android:enabled="false"
                                 android:gravity="end"
-                                android:textSize="18sp"/>
+                                android:text="lionfischer@gmail.com"
+                                android:textSize="18sp" />
                         </LinearLayout>
 
                         <LinearLayout

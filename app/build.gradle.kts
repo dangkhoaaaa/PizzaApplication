@@ -40,6 +40,7 @@ dependencies {
     //  implementation("android.arch.lifecycle:extensions:1.1.1")
     implementation ("com.google.android.gms:play-services-maps:18.0.2")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation ("com.google.android.material:material:version")
 
     //   implementation("com.android.volley:volley:1.2.1")
     implementation("com.github.momo-wallet:mobile-sdk:1.0.7")
@@ -56,8 +57,10 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
+    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
 
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

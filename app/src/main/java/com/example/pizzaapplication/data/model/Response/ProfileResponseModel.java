@@ -3,11 +3,8 @@ package com.example.pizzaapplication.data.model.Response;
 import com.google.gson.annotations.SerializedName;
 
 public class ProfileResponseModel {
-    @SerializedName("first-name")
-    private String firstName;
-
-    @SerializedName("last-name")
-    private String lastName;
+    @SerializedName("name")
+    private String name;
 
     @SerializedName("date-of-birth")
     private String dateOfBirth;
@@ -27,8 +24,7 @@ public class ProfileResponseModel {
     //default constructor
     public ProfileResponseModel() {
         this.email = "";
-        this.firstName = "";
-        this.lastName = "";
+        this.name = "";
         this.dateOfBirth = "";
         this.address = "";
         this.phone = "";
@@ -36,10 +32,9 @@ public class ProfileResponseModel {
     }
 
     // Parameterized constructor
-    public ProfileResponseModel(String email, String firstName, String lastName, String dateOfBirth, String address, String phone, String profilePic) {
+    public ProfileResponseModel(String email, String name, String dateOfBirth, String address, String phone, String profilePic) {
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.address = address;
         this.phone = phone;
@@ -48,20 +43,12 @@ public class ProfileResponseModel {
 
     // Getters and setters
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDateOfBirth() {
@@ -107,8 +94,7 @@ public class ProfileResponseModel {
     @Override
     public String toString() {
         return "ProfileResponseModel{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                "name='" + name + '\'' +
                 ", dateOfBirth='" + dateOfBirth + '\'' +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +

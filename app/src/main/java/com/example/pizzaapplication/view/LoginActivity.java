@@ -1,5 +1,6 @@
 package com.example.pizzaapplication.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,11 +18,14 @@ import com.example.pizzaapplication.data.model.Response.TokenResponse;
 import com.example.pizzaapplication.data.repository.UserRepository;
 import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.utils.JwtUtils;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText editTextEmail;
-    private EditText editTextPassword;
+//    private EditText editTextEmail;
+//    private EditText editTextPassword;
+    private TextInputEditText editTextEmail, editTextPassword;
+
     private Button buttonLogin;
     private TextView textViewForgotPassword;
     private TextView textViewCreateAccount;
@@ -36,13 +40,13 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin = findViewById(R.id.buttonLogin);
         textViewForgotPassword = findViewById(R.id.textViewForgotPassword);
         textViewCreateAccount = findViewById(R.id.textViewCreateAccount);
+        DataLocalManager.init(this);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = editTextEmail.getText().toString().trim();
                 String password = editTextPassword.getText().toString().trim();
-
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
                 } else {

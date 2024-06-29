@@ -30,6 +30,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -52,15 +53,14 @@ public interface ApiService {
     Call<ApiResponse<Integer>> createOrder(@Body CustomerOrderRequestModel orderRequest);
 
     //Get profile
-    @GET("users/profile?id=1")
-    Call<ProfileResponseModel> getProfile();
+    @GET("users/profile")
+    Call<ProfileResponseModel> getProfile(@Query("id") String userId);
 
     @Multipart
     @PUT("users/profile")
     Call<ApiResponse> updateProfile(
             @Part("id") RequestBody id,
-            @Part("first_name") RequestBody firstName,
-            @Part("last_name") RequestBody lastName,
+            @Part("name") RequestBody name,
             @Part("date_of_birth") RequestBody dateOfBirth,
             @Part("address") RequestBody address,
             @Part("phone") RequestBody phone,
