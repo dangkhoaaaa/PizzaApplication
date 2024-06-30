@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pizzaapplication.R;
 import com.example.pizzaapplication.adapter.DrinkAdapter;
 import com.example.pizzaapplication.data.api.RetrofitClient;
+import com.example.pizzaapplication.data.model.Drink;
 import com.example.pizzaapplication.data.model.Request.CustomerDrinkRequestModel;
 import com.example.pizzaapplication.data.model.Response.DrinkModel;
 import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
@@ -36,9 +37,13 @@ public class DrinkFragment extends Fragment {
     private DrinkViewModel drinkViewModel;
     private static final String TAG = "DrinkFragment";
     private static List<CustomerDrinkRequestModel> cart = new ArrayList<>();
+    private static List<Drink> displayCart = new ArrayList<>();
 
     public static List<CustomerDrinkRequestModel> getDrinkCart() {
         return cart;
+    }
+    public static List<Drink> getDrinkDisplayCart() {
+        return displayCart;
     }
 
     @Nullable
@@ -91,11 +96,35 @@ public class DrinkFragment extends Fragment {
     }
 
     private void addToCart(DrinkModel drink, int quantity) {
-        // Add the drink to the cart with specified quantity
-        cart.add(new CustomerDrinkRequestModel(quantity, drink.getId(), drink.getPrice() * quantity));
+        boolean isExist = false;
+        // Check if the drink already exists in cart
+        for (CustomerDrinkRequestModel item : cart) {
+            if (item.getDrinkId() == drink.getId()) {
+                // If exists, increase the quantity
+                item.setQuantity(item.getQuantity() + quantity);
+                item.setPrice(item.getPrice()  + drink.getPrice()*quantity);
+                // Update display cart with the increased quantity
+                for (Drink display : displayCart) {
+                    if (display.getName().equals(drink.getName())) {
+                        display.setQuantity(display.getQuantity() + quantity);
+                        display.setPrice(display.getPrice() + drink.getPrice()*quantity);
+                        break;
+                    }
+                }
+
+                isExist = true;
+                break;
+            }
+        }
+
+        // If not exists, add the drink to cart with specified quantity
+        if (!isExist) {
+            cart.add(new CustomerDrinkRequestModel(quantity, drink.getId(), drink.getPrice() * quantity));
+            displayCart.add(new Drink(drink.getName(), drink.getImage(), quantity, drink.getPrice() * quantity));
+        }
+
         // Show a toast message
-        Toast.makeText(getContext(), quantity + " x " + drink.getName() + " added to cart", Toast.LENGTH_SHORT).show();
-    }
+        Toast.makeText(getContext(), quantity + " x " + drink.getName() + " added to cart", Toast.LENGTH_SHORT).show(); }
 
     private void logDrinks(List<DrinkModel> drinks) {
         for (DrinkModel drink : drinks) {

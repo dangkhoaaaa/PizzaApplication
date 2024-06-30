@@ -5,52 +5,19 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class Drink {
-
-    @SerializedName("drinkId")
-    private int drinkId;
-
-    @SerializedName("name")
     private String name;
+    private String img;
+    private int quantity;
+    private double price;
 
-    @SerializedName("description")
-    private String description;
-
-    @SerializedName("price")
-    private BigDecimal price;
-
-    @SerializedName("image")
-    private String image;
-
-    @SerializedName("customerDrinks")
-    private List<CustomerDrink> customerDrinks;
-
-    // Default constructor
     public Drink() {
-        this.drinkId = 0;
-        this.name = "";
-        this.description = "";
-        this.price = BigDecimal.ZERO;
-        this.image = "";
-        this.customerDrinks = null; // or initialize as new ArrayList<>();
     }
 
-    // Parameterized constructor
-    public Drink(int drinkId, String name, String description, BigDecimal price, String image, List<CustomerDrink> customerDrinks) {
-        this.drinkId = drinkId;
+    public Drink(String name, String img, int quantity, double price) {
         this.name = name;
-        this.description = description;
+        this.img = img;
+        this.quantity = quantity;
         this.price = price;
-        this.image = image;
-        this.customerDrinks = customerDrinks;
-    }
-
-    // Getters and Setters
-    public int getDrinkId() {
-        return drinkId;
-    }
-
-    public void setDrinkId(int drinkId) {
-        this.drinkId = drinkId;
     }
 
     public String getName() {
@@ -61,48 +28,27 @@ public class Drink {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getImg() {
+        return img;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setImg(String img) {
+        this.img = img;
     }
 
-    public BigDecimal getPrice() {
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public List<CustomerDrink> getCustomerDrinks() {
-        return customerDrinks;
-    }
-
-    public void setCustomerDrinks(List<CustomerDrink> customerDrinks) {
-        this.customerDrinks = customerDrinks;
-    }
-
-    // toString method to print Drink object details
-    @Override
-    public String toString() {
-        return "Drink{" +
-                "drinkId=" + drinkId +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", image='" + image + '\'' +
-                ", customerDrinks=" + customerDrinks +
-                '}';
     }
 }
