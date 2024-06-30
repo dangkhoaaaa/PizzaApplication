@@ -15,12 +15,15 @@ import com.example.pizzaapplication.R;
 import com.example.pizzaapplication.adapter.CartAdapter;
 import com.example.pizzaapplication.data.api.ApiService;
 import com.example.pizzaapplication.data.api.RetrofitClient;
+import com.example.pizzaapplication.data.model.Drink;
+import com.example.pizzaapplication.data.model.Pizza;
 import com.example.pizzaapplication.data.model.Request.CustomerDrinkRequestModel;
 import com.example.pizzaapplication.data.model.Request.CustomerOrderRequestModel;
 import com.example.pizzaapplication.data.model.Request.CustomerPizzaRequestModel;
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.utils.JwtUtils;
+import com.example.pizzaapplication.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,16 +84,19 @@ public class CartActivity extends AppCompatActivity {
             return;
         }
 
+        List<Pizza> pizzdisplay = PizzaDetailActivity.getDisplayCart();
+        List<Drink> drinkDisplay = DrinkFragment.getDrinkDisplayCart();
         List<CustomerPizzaRequestModel> pizzaCart = PizzaDetailActivity.getCart();
         List<CustomerDrinkRequestModel> drinkCart = DrinkFragment.getDrinkCart();
 
-        if ((pizzaCart != null && !pizzaCart.isEmpty()) || (drinkCart != null && !drinkCart.isEmpty())) {
+
+        if ((pizzdisplay != null && !pizzdisplay.isEmpty()) || (drinkDisplay != null && !drinkDisplay.isEmpty())) {
             List<Object> cartItems = new ArrayList<>();
-            if (pizzaCart != null) {
-                cartItems.addAll(pizzaCart);
+            if (pizzdisplay != null) {
+                cartItems.addAll(pizzdisplay);
             }
-            if (drinkCart != null) {
-                cartItems.addAll(drinkCart);
+            if (drinkDisplay != null) {
+                cartItems.addAll(drinkDisplay);
             }
 
             CartAdapter adapter = new CartAdapter(this, cartItems);
@@ -107,7 +113,8 @@ public class CartActivity extends AppCompatActivity {
                     totalPrice = calculateTotalPrice(pizzaCart, drinkCart);
                     processCheckout(userId, pizzaCart, drinkCart, totalPrice);
                 } else {
-                    Toast.makeText(CartActivity.this, "Checkout is already in progress", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CartActivity.this, "Checkout is already in progress", Toast.LENGTH_SHORT).show();
+                    Utils.showToast(CartActivity.this, "Checkout is already in progress");
                 }
             }
         });

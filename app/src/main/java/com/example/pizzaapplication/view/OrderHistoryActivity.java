@@ -13,11 +13,8 @@ import com.example.pizzaapplication.R;
 import com.example.pizzaapplication.adapter.OrderAdapter;
 import com.example.pizzaapplication.data.api.RetrofitClient;
 import com.example.pizzaapplication.data.model.Response.OrderHistoryResponseModel;
-import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
 import com.example.pizzaapplication.data.repository.OrderHistoryRepository;
-import com.example.pizzaapplication.data.repository.PizzaRepository;
 import com.example.pizzaapplication.viewmodel.OrderHistoryViewModel;
-import com.example.pizzaapplication.viewmodel.PizzaViewModel;
 
 import java.util.List;
 
@@ -27,21 +24,17 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private OrderAdapter orderAdapter;
     private OrderHistoryViewModel orderHistoryViewModel;
     private static final String TAG = "OrderHistoryActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
-
 
         // Initialize RecyclerView
         recyclerView = findViewById(R.id.rcOrderHistory);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         orderAdapter = new OrderAdapter();
         recyclerView.setAdapter(orderAdapter);
-
-//        // Initialize OderHistoryRepository and OderHistoryViewModel
-//        OrderHistoryRepository oderHistoryRepository = new OrderHistoryRepository(RetrofitClient.getApiService());
-//        orderHistoryViewModel = new OrderHistoryViewModel(oderHistoryRepository);
 
         // Initialize OrderHistoryRepository and OrderHistoryViewModel
         OrderHistoryRepository orderHistoryRepository = new OrderHistoryRepository(RetrofitClient.getApiService());
@@ -60,10 +53,19 @@ public class OrderHistoryActivity extends AppCompatActivity {
                 }
             }
         });
+
+        orderAdapter.setOnItemClickListener(order -> {
+            OrderDetailsDialogFragment dialogFragment = OrderDetailsDialogFragment.newInstance(String.valueOf(order.getOrderId()));
+            dialogFragment.show(getSupportFragmentManager(), "OrderDetailsDialog");
+        });
     }
 
     private void displayOrders(List<OrderHistoryResponseModel> orders) {
-        orderAdapter.setOrders(orders);
+        if (orders != null) {
+            orderAdapter.setOrders(orders);
+        } else {
+            Log.d(TAG, "No order histories received");
+        }
     }
 
     private void logOrders(List<OrderHistoryResponseModel> orders) {

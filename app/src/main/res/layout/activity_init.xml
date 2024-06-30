@@ -33,14 +33,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:background="@drawable/green_gradient"/>
 
         <Button
             android:id="@+id/buttonGuest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Continue as Guest"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:background="@drawable/green_gradient"
+            />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

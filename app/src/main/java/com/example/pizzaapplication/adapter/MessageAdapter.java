@@ -1,5 +1,6 @@
 package com.example.pizzaapplication.adapter;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
         String message = messageList.get(position);
         holder.textViewMessage.setText(message);
+        // Đặt lại căn chỉnh dựa trên điều kiện của tin nhắn (của bạn hay của người khác)
+        if (message.startsWith("You:")) {
+            // Căn phải nếu là tin nhắn của bạn
+            holder.textViewMessage.setGravity(Gravity.END);
+        } else {
+            // Căn trái nếu là tin nhắn của người khác
+            holder.textViewMessage.setGravity(Gravity.START);
+        }
     }
 
     @Override

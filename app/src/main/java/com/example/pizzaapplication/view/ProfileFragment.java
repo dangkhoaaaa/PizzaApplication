@@ -25,6 +25,7 @@ import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.ProfileResponseModel;
 import com.example.pizzaapplication.data.repository.ProfileRepository;
 import com.example.pizzaapplication.share.DataLocalManager;
+import com.example.pizzaapplication.utils.Utils;
 import com.example.pizzaapplication.viewmodel.ProfileViewModel;
 
 import java.text.ParseException;
@@ -180,31 +181,31 @@ public class ProfileFragment extends Fragment {
         // Convert date of birth to desired format
 
         String dateOfBirth = profileResponseModel.getDateOfBirth();
-        String formattedDoB = formatDateOfBirth(dateOfBirth);
+        String formattedDoB = Utils.formatDateOfBirth(dateOfBirth);
         tvDoB.setText(formattedDoB);
         tvAddress.setText(profileResponseModel.getAddress());
         tvPhone.setText(profileResponseModel.getPhone());
         tvMail.setText(profileResponseModel.getEmail());
     }
 
-    private String formatDateOfBirth(String dateOfBirth) {
-        if (dateOfBirth == null || dateOfBirth.isEmpty()) {
-            return ""; // Handle empty date
-        }
-
-        try {
-            // Parse the date from the API response format (assuming ISO 8601)
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            Date date = inputFormat.parse(dateOfBirth);
-
-            // Format the date to the desired output format
-            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
-            return outputFormat.format(date);
-        } catch (ParseException e) {
-            Log.e(TAG, "Error parsing date of birth: " + e.getMessage());
-            return dateOfBirth; // Return original value if parsing fails
-        }
-    }
+//    private String formatDateOfBirth(String dateOfBirth) {
+//        if (dateOfBirth == null || dateOfBirth.isEmpty()) {
+//            return ""; // Handle empty date
+//        }
+//
+//        try {
+//            // Parse the date from the API response format (assuming ISO 8601)
+//            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+//            Date date = inputFormat.parse(dateOfBirth);
+//
+//            // Format the date to the desired output format
+//            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+//            return outputFormat.format(date);
+//        } catch (ParseException e) {
+//            Log.e(TAG, "Error parsing date of birth: " + e.getMessage());
+//            return dateOfBirth; // Return original value if parsing fails
+//        }
+//    }
 
 
     private void logProfile(ProfileResponseModel profileResponseModel) {
@@ -213,43 +214,44 @@ public class ProfileFragment extends Fragment {
 
     // Method to update profile information on server (implement your logic here)
     private void updateProfileInformation() {
-        //convert string to integer
         int userId = Integer.parseInt(DataLocalManager.getUserId());
         String newFullName = tvFullName.getText().toString();
         String newDoB = tvDoB.getText().toString();
         String newAddress = tvAddress.getText().toString();
         String newPhone = tvPhone.getText().toString();
 
-        // Phone number validation
-        if (!isValidPhoneNumber(newPhone)) {
+        if (!Utils.isValidPhoneNumber(newPhone)) {
             Toast.makeText(requireContext(), "Invalid phone number format. Please enter a 10-digit number starting with '0'", Toast.LENGTH_SHORT).show();
-            return; // Prevent update if phone number is invalid
+            return;
         }
-        // Make API call to update profile using new information
-        // ...
+
+        ProfileResponseModel currentProfile = profileViewModel.getProfileData().getValue();
+        if (currentProfile != null &&
+                currentProfile.getName().equals(newFullName) &&
+                Utils.formatDateOfBirth(currentProfile.getDateOfBirth()).equals(newDoB) &&
+                currentProfile.getAddress().equals(newAddress) &&
+                currentProfile.getPhone().equals(newPhone)) {
+            Toast.makeText(requireContext(), "No changes detected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         ProfileRequestModel profileRequestModel = new ProfileRequestModel(
                 userId, newFullName, newDoB, newAddress, newPhone, null
         );
 
-        // Convert profile picture to MultipartBody.Part
         MultipartBody.Part profilePic = null;
-//        MultipartBody.Part profilePic = MultipartBody.Part.createFormData("profile_pic", "");
-
 
         profileViewModel.updateProfile(profileRequestModel, profilePic);
-        // Observe the update profile live data for success/failure
-        profileViewModel.getUpdateSuccess().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean updateSuccess) {
-                if (updateSuccess != null && updateSuccess) {
-                    showSuccessToast();
-                    updateUiElementsWithNewInformation(newFullName,newDoB,newAddress,newPhone);
-                } else {
-                    // Handle update failure (optional: show error toast)
-                }
+        profileViewModel.getUpdateSuccess().observe(getViewLifecycleOwner(), updateSuccess -> {
+            if (updateSuccess != null && updateSuccess) {
+                showSuccessToast();
+                updateUiElementsWithNewInformation(newFullName, newDoB, newAddress, newPhone);
+            } else {
+                Toast.makeText(requireContext(), "Update failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     private void showSuccessToast() {
         String successMessage = getString(R.string.profile_update_success); // Use string resource for localization

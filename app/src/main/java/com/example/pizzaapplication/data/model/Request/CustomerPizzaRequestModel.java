@@ -14,7 +14,6 @@ public class CustomerPizzaRequestModel {
     private int quantity;
 
 
-
     @SerializedName("pizzaId")
     private int pizzaId;
 

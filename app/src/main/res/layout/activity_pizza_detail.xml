@@ -4,54 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<!--    <ImageView-->
-<!--        android:id="@+id/imageViewPizza"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="200dp"-->
-<!--        android:scaleType="centerCrop"-->
-<!--        android:layout_marginBottom="8dp" />-->
-<!--    <TextView-->
-<!--        android:id="@+id/textViewPizzaName"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textSize="24sp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:layout_marginBottom="8dp" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/textViewPizzaDescription"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textSize="18sp"-->
-<!--        android:layout_marginBottom="8dp" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/textViewPizzaPrice"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textSize="18sp"-->
-<!--        android:textColor="@android:color/holo_red_dark" />-->
-
-<!--    <Spinner-->
-<!--        android:id="@+id/spinnerToppings"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@id/textViewPizzaPrice"-->
-<!--        android:layout_marginBottom="16dp"/>-->
-
-<!--    <Spinner-->
-<!--        android:id="@+id/spinnerSizes"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@id/spinnerToppings"/>-->
-<!--    <Button-->
-<!--        android:id="@+id/buttonAddToCart"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@id/spinnerSizes"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:text="Add to Cart" />-->
 
     <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_width="match_parent"
@@ -122,14 +74,14 @@
                         android:layout_width="0dp"
                         android:layout_height="@dimen/xxxl" />
 
-                    <TextView
-                        android:id="@+id/textViewPizzaPrice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:text="$75.00"
-                        android:textAlignment="textStart"
-                        android:textSize="18sp" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/textViewPizzaPrice"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="start"-->
+<!--                        android:text="$75.00"-->
+<!--                        android:textAlignment="textStart"-->
+<!--                        android:textSize="18sp" />-->
 
                     <View
                         android:layout_width="0dp"
@@ -173,13 +125,13 @@
 
                     <Button
                         android:id="@+id/buttonAddToCart"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/spinnerSizes"
                         android:layout_marginTop="16dp"
-                        android:layout_centerHorizontal="true"
-                        android:backgroundTint="@color/Green"
-                        android:text="Add to Cart"/>
+                        android:gravity="center_vertical"
+                        android:text="Add to Cart"
+                        android:background="@drawable/green_gradient"/>
 
                     <View
                         android:layout_width="0dp"
