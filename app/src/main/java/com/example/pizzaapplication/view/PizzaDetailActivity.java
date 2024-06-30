@@ -21,6 +21,7 @@ import com.example.pizzaapplication.R;
 import com.example.pizzaapplication.adapter.SizeAdapter;
 import com.example.pizzaapplication.adapter.ToppingAdapter;
 import com.example.pizzaapplication.data.api.RetrofitClient;
+import com.example.pizzaapplication.data.model.Pizza;
 import com.example.pizzaapplication.data.model.Request.CustomerPizzaRequestModel;
 import com.example.pizzaapplication.data.model.Response.PizzaModel;
 import com.example.pizzaapplication.data.model.Response.SizeModel;
@@ -52,6 +53,8 @@ public class PizzaDetailActivity extends AppCompatActivity {
 
     // A static list to store cart items
     private static List<CustomerPizzaRequestModel> cart = new ArrayList<>();
+
+    private static List<Pizza> displayCart = new ArrayList<>();
 
     // Variables to hold the selected size and topping
     private SizeModel selectedSize;
@@ -172,15 +175,46 @@ public class PizzaDetailActivity extends AppCompatActivity {
     private void addToCart() {
         if (Utils.isLoggedIn()) {
             if (selectedTopping != null && selectedSize != null) {
-                CustomerPizzaRequestModel customerPizza = new CustomerPizzaRequestModel();
-                customerPizza.setPizzaId(pizza.getPizzaId());
-                customerPizza.setSizeId(sizeId);
-                customerPizza.setQuantity(1);
-                customerPizza.setToppingId(toppingId);
-                customerPizza.setPrice(pizza.getPrice() + toppingPrice + sizePrice);
-                cart.add(customerPizza);
-                Toast.makeText(this, "Pizza added to cart!", Toast.LENGTH_SHORT).show();
+                boolean isExist = false;
+                // Check if the pizza already exists in cart
+                for (CustomerPizzaRequestModel item : cart) {
+                    if (item.getPizzaId() == pizza.getPizzaId() && item.getSizeId() == sizeId && item.getToppingId() == toppingId) {
+                        // If exists, increase the quantity
+                        item.setQuantity(item.getQuantity() + 1);
+                        item.setPrice(item.getPrice() + pizza.getPrice() + toppingPrice + sizePrice); // Update price based on quantity
+                        // Update display cart with the increased quantity
+                        for (Pizza display : displayCart) {
+                            if (display.getName().equals(pizza.getName()) && display.getSize().equals(selectedSize.getName()) && display.getTopping().equals(selectedTopping.getName())) {
+                                display.setQuantity(display.getQuantity() + 1);
+                                display.setPrice(display.getPrice() + pizza.getPrice() + toppingPrice + sizePrice); // Update display price based on quantity
+                                break;
+                            }
+                        }
+                        isExist = true;
+                        break;
+                    }
+                }
+                // If not exists, add the pizza to cart with quantity 1
+                if (!isExist) {
+                    CustomerPizzaRequestModel customerPizza = new CustomerPizzaRequestModel();
+                    customerPizza.setPizzaId(pizza.getPizzaId());
+                    customerPizza.setSizeId(sizeId);
+                    customerPizza.setQuantity(1);
+                    customerPizza.setToppingId(toppingId);
+                    customerPizza.setPrice(pizza.getPrice() + toppingPrice + sizePrice);
+                    cart.add(customerPizza);
 
+                    // add to display pizza
+                    Pizza display = new Pizza();
+                    display.setName(pizza.getName());
+                    display.setTopping(selectedTopping.getName());
+                    display.setSize(selectedSize.getName());
+                    display.setPrice(pizza.getPrice() + toppingPrice + sizePrice);
+                    display.setImg(pizza.getImage());
+                    display.setQuantity(1);
+                    displayCart.add(display);
+                }
+                Toast.makeText(this, "Pizza added to cart!", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Please select a size and topping", Toast.LENGTH_SHORT).show();
             }
@@ -189,6 +223,9 @@ public class PizzaDetailActivity extends AppCompatActivity {
         }
     }
 
+    public static List<Pizza> getDisplayCart() {
+        return displayCart;
+    }
     public static List<CustomerPizzaRequestModel> getCart() {
         return cart;
     }

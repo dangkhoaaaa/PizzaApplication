@@ -2,33 +2,92 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
-    <ImageView
-        android:id="@+id/imageViewPizza"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Pizza Image" />
-    <TextView
-        android:id="@+id/textViewPizzaName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pizza Name" />
+    android:background="@color/Gainsboro"
+    android:padding="6dp">
 
-    <TextView
-        android:id="@+id/textViewSize"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Size" />
 
-    <TextView
-        android:id="@+id/textViewTopping"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Topping" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textViewPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Price" />
+        <LinearLayout
+            android:id="@+id/rootItemLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp"
+            android:background="@drawable/bg_item_main"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/imageViewPizza"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="0dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/temp_pizza"
+                android:transitionName="image pizza" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="5dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="start"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewPizzaName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pizza Name"
+                        android:textColor="@color/Black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/xl" />
+                    <TextView
+                        android:id="@+id/textViewSize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Size"
+                        android:gravity="start"
+                        android:textColor="@color/Gray"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/textViewTopping"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="topping"
+                        android:textColor="@color/Gray"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/textViewQuantityPizza"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="topping"
+                        android:textColor="@color/Gray"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/textViewPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Price"
+                        android:textColor="@color/Gray"
+                        android:textSize="16sp" />
+
+
+                </LinearLayout>
+            </FrameLayout>
+
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

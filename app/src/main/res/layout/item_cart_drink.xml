@@ -3,21 +3,76 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
-    <ImageView
-        android:id="@+id/imageViewDrink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="Drink Image" />
-    <TextView
-        android:id="@+id/textViewDrinkName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Drink Name" />
+    android:background="@color/Gainsboro"
+    android:padding="6dp">
 
-    <TextView
-        android:id="@+id/textViewDrinkPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Drink Price" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/rootItemLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10dp"
+            android:background="@drawable/bg_item_main"
+            android:orientation="horizontal">
+
+
+            <ImageView
+                android:id="@+id/imageViewDrink"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="0dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/temp_pizza"
+                android:transitionName="image pizza" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="5dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="start"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textViewDrinkName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pizza Name"
+                        android:textColor="@color/Black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/xl" />
+
+                    <TextView
+                        android:id="@+id/textViewQuantityDrink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="topping"
+                        android:textColor="@color/Gray"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/textViewDrinkPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Price"
+                        android:textColor="@color/Gray"
+                        android:textSize="16sp" />
+
+
+                </LinearLayout>
+            </FrameLayout>
+
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>
