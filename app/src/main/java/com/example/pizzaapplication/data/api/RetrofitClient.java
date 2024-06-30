@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 
 public class RetrofitClient {
     private static final String BASE_URL = "https://pizzafapi.azurewebsites.net/api/";
+//    private static final String BASE_URL = "https://192.168.50.42:8000/api/";
     private static Retrofit retrofit;
 
     public static Retrofit getClient() {

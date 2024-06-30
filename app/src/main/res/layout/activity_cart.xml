@@ -8,13 +8,14 @@
         android:id="@+id/listViewCart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="48dp"
         android:padding="16dp" />
 
     <Button
         android:id="@+id/buttonCheckout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thanh toán"
+        android:text="Check Out"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         style="@style/Btn_Style_Confirm" />

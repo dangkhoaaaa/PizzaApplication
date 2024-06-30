@@ -21,6 +21,7 @@ import com.example.pizzaapplication.data.model.Request.CustomerPizzaRequestModel
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.utils.JwtUtils;
+import com.example.pizzaapplication.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -107,7 +108,8 @@ public class CartActivity extends AppCompatActivity {
                     totalPrice = calculateTotalPrice(pizzaCart, drinkCart);
                     processCheckout(userId, pizzaCart, drinkCart, totalPrice);
                 } else {
-                    Toast.makeText(CartActivity.this, "Checkout is already in progress", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(CartActivity.this, "Checkout is already in progress", Toast.LENGTH_SHORT).show();
+                    Utils.showToast(CartActivity.this, "Checkout is already in progress");
                 }
             }
         });

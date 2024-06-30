@@ -6,6 +6,7 @@ import com.example.pizzaapplication.data.model.Request.ProfileRequestModel;
 import com.example.pizzaapplication.data.model.Request.RegisterRequestModel;
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
+import com.example.pizzaapplication.data.model.Response.OrderDetailResponseModel;
 import com.example.pizzaapplication.data.model.Response.OrderHistoryResponseModel;
 import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
 import com.example.pizzaapplication.data.model.Response.ProfileResponseModel;
@@ -90,5 +91,9 @@ public interface ApiService {
             @Field("phone") String phone,
             @Field("address") String address
     );
+
+    //get order detaul
+    @GET("cus-orders/{orderId}")
+    Call<OrderDetailResponseModel> getOrderDetails(@Path("orderId") String orderId);
 
 }

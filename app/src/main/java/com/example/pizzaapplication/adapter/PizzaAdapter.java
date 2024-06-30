@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.pizzaapplication.R;
 import com.example.pizzaapplication.data.model.Response.PizzaModel;
+import com.example.pizzaapplication.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,8 @@ public class PizzaAdapter extends RecyclerView.Adapter<PizzaAdapter.PizzaViewHol
         public void bind(final PizzaModel pizza, final OnItemClickListener listener) {
             textViewPizzaName.setText(pizza.getName());
             textViewPizzaDescription.setText(pizza.getDescription());
-            textViewPizzaPrice.setText(String.valueOf(pizza.getPrice()));
+            String pizzaPrice = Utils.formattedPrice(pizza.getPrice());
+            textViewPizzaPrice.setText(pizzaPrice + "đ");
 
             // Load image using Glide
             Glide.with(itemView.getContext())

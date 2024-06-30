@@ -29,6 +29,7 @@ import com.example.pizzaapplication.data.model.Response.ToppingModel;
 import com.example.pizzaapplication.data.model.Response.ToppingResponseModel;
 import com.example.pizzaapplication.data.repository.SizeRepository;
 import com.example.pizzaapplication.data.repository.ToppingRepository;
+import com.example.pizzaapplication.utils.Utils;
 import com.example.pizzaapplication.viewmodel.PizzaDetailViewModel;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class PizzaDetailActivity extends AppCompatActivity {
 
     private PizzaDetailViewModel pizzaDetailViewModel;
     private Spinner spinnerToppings, spinnerSizes;
-    private TextView textViewPrice;
+//    private TextView textViewPrice;
     private ImageView imageViewPizza;
     private PizzaModel pizza;
     private double toppingPrice = 0;
@@ -63,7 +64,7 @@ public class PizzaDetailActivity extends AppCompatActivity {
 
         TextView textViewName = findViewById(R.id.textViewPizzaName);
         TextView textViewDescription = findViewById(R.id.textViewPizzaDescription);
-        textViewPrice = findViewById(R.id.textViewPizzaPrice);
+//        textViewPrice = findViewById(R.id.textViewPizzaPrice);
         imageViewPizza = findViewById(R.id.imageViewPizza);
         spinnerToppings = findViewById(R.id.spinnerToppings);
         spinnerSizes = findViewById(R.id.spinnerSizes);
@@ -75,7 +76,7 @@ public class PizzaDetailActivity extends AppCompatActivity {
             if (pizza != null) {
                 textViewName.setText(pizza.getName());
                 textViewDescription.setText(pizza.getDescription());
-                textViewPrice.setText(String.valueOf(pizza.getPrice()));
+//                textViewPrice.setText(String.valueOf(pizza.getPrice()));
 
                 // Load the pizza image using Glide
                 Glide.with(this)
@@ -164,26 +165,35 @@ public class PizzaDetailActivity extends AppCompatActivity {
 
     private void updatePrice() {
         double totalPrice = pizza.getPrice() + toppingPrice + sizePrice;
-        textViewPrice.setText(String.valueOf(totalPrice));
+//        textViewPrice.setText(String.valueOf(totalPrice));
+        buttonAddToCart.setText(String.format("Add %50sđ", Utils.formattedPrice(totalPrice)));
     }
 
     private void addToCart() {
-        if (selectedTopping != null && selectedSize != null) {
-            CustomerPizzaRequestModel customerPizza = new CustomerPizzaRequestModel();
-            customerPizza.setPizzaId(pizza.getPizzaId());
-            customerPizza.setSizeId(sizeId);
-            customerPizza.setQuantity(1);
-            customerPizza.setToppingId(toppingId);
-            customerPizza.setPrice(pizza.getPrice() + toppingPrice + sizePrice);
-            cart.add(customerPizza);
+        if (Utils.isLoggedIn()) {
+            if (selectedTopping != null && selectedSize != null) {
+                CustomerPizzaRequestModel customerPizza = new CustomerPizzaRequestModel();
+                customerPizza.setPizzaId(pizza.getPizzaId());
+                customerPizza.setSizeId(sizeId);
+                customerPizza.setQuantity(1);
+                customerPizza.setToppingId(toppingId);
+                customerPizza.setPrice(pizza.getPrice() + toppingPrice + sizePrice);
+                cart.add(customerPizza);
+                Toast.makeText(this, "Pizza added to cart!", Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(this, "Pizza added to cart!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Please select a size and topping", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this, "Please select a size and topping", Toast.LENGTH_SHORT).show();
+            showLoginPrompt();
         }
     }
 
     public static List<CustomerPizzaRequestModel> getCart() {
         return cart;
+    }
+
+    private void showLoginPrompt() {
+        Utils.showLoginPrompt(this, "You need to log in to access this section. Do you want to log in now?");
     }
 }
