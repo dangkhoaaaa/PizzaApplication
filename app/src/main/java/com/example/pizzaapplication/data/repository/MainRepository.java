@@ -17,9 +17,9 @@ public class MainRepository {
         this.apiService = apiService;
     }
 
-    public void getUsers(Callback<List<User>> callback) {
-        Call<List<User>> call = apiService.getUsers();
-        call.enqueue(callback);
-    }
+//    public void getUsers(Callback<List<User>> callback) {
+//        Call<List<User>> call = apiService.getUsers();
+//        call.enqueue(callback);
+//    }
 }
 

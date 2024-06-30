@@ -1,5 +1,6 @@
 package com.example.pizzaapplication.data.api;
 
+import com.example.pizzaapplication.data.model.Notification;
 import com.example.pizzaapplication.data.model.Pizza;
 import com.example.pizzaapplication.data.model.Request.CustomerOrderRequestModel;
 import com.example.pizzaapplication.data.model.Request.PizzaCreateRequestModel;
@@ -18,6 +19,7 @@ import com.example.pizzaapplication.data.model.Response.SizeResponseModel;
 import com.example.pizzaapplication.data.model.Response.TokenResponse;
 import com.example.pizzaapplication.data.model.Response.ToppingModel;
 import com.example.pizzaapplication.data.model.Response.ToppingResponseModel;
+import com.example.pizzaapplication.data.model.Response.UsersResponseModel;
 import com.example.pizzaapplication.data.model.User;
 
 import java.util.List;
@@ -39,8 +41,8 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
-    @GET("users")
-    Call<List<User>> getUsers();
+    @GET("users?current-page=1&page-size=10")
+    Call<UsersResponseModel> getUsers();
 
     @GET("pizzas?current-page=1&page-size=3&sort-by-price=true&descending=true")
     Call<PizzaResponseModel> getPizza();
@@ -135,5 +137,8 @@ public interface ApiService {
     //get order detaul
     @GET("cus-orders/{orderId}")
     Call<OrderDetailResponseModel> getOrderDetails(@Path("orderId") String orderId);
+
+    @GET("notifications")
+    Call<List<Notification>> getNotification();
 
 }
