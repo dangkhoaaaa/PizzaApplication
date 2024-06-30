@@ -2,6 +2,8 @@ package com.example.pizzaapplication.data.api;
 
 import com.example.pizzaapplication.data.model.Pizza;
 import com.example.pizzaapplication.data.model.Request.CustomerOrderRequestModel;
+import com.example.pizzaapplication.data.model.Request.PizzaCreateRequestModel;
+import com.example.pizzaapplication.data.model.Request.PizzaUpdateRequestModel;
 import com.example.pizzaapplication.data.model.Request.ProfileRequestModel;
 import com.example.pizzaapplication.data.model.Request.RegisterRequestModel;
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
@@ -90,6 +92,44 @@ public interface ApiService {
             @Field("password") String password,
             @Field("phone") String phone,
             @Field("address") String address
+    );
+    @Multipart
+    @POST("pizzas")
+    Call<ApiResponse> createPizza(
+            @Part("name") RequestBody name,
+            @Part("description") RequestBody description,
+            @Part("price") RequestBody price,
+            @Part("image") RequestBody image
+    );
+
+    @Multipart
+    @PUT("pizzas")
+
+    Call<ApiResponse> updatePizza(
+            @Part("id") RequestBody id,
+            @Part("name") RequestBody name,
+            @Part("description") RequestBody description,
+            @Part("price") RequestBody price,
+            @Part("image") RequestBody image
+    );
+    @Multipart
+    @POST("drinks")
+    Call<ApiResponse> createDrink(
+            @Part("name") RequestBody name,
+            @Part("description") RequestBody description,
+            @Part("price") RequestBody price,
+            @Part("image") RequestBody image
+    );
+
+    @Multipart
+    @PUT("drinks")
+
+    Call<ApiResponse> updateDrink(
+            @Part("id") RequestBody id,
+            @Part("name") RequestBody name,
+            @Part("description") RequestBody description,
+            @Part("price") RequestBody price,
+            @Part("image") RequestBody image
     );
 
     //get order detaul

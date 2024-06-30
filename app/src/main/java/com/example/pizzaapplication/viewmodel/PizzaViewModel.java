@@ -5,6 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pizzaapplication.data.model.Pizza;
+import com.example.pizzaapplication.data.model.Request.PizzaCreateRequestModel;
+import com.example.pizzaapplication.data.model.Request.PizzaUpdateRequestModel;
+import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
 import com.example.pizzaapplication.data.repository.MainRepository;
 import com.example.pizzaapplication.data.repository.PizzaRepository;
@@ -45,4 +48,13 @@ public class PizzaViewModel extends ViewModel {
             }
         });
     }
+
+    public LiveData<ApiResponse> createPizza(PizzaCreateRequestModel pizza) {
+        return pizzaRepository.createPizza(pizza);
+    }
+
+    public LiveData<ApiResponse> updatePizza(PizzaUpdateRequestModel pizza) {
+        return pizzaRepository.updatePizza(pizza);
+    }
+
 }

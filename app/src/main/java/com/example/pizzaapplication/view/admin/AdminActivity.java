@@ -26,14 +26,14 @@ public class AdminActivity extends AppCompatActivity {
         findViewById(R.id.buttonEditPizza).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  startActivity(new Intent(AdminActivity.this, EditPizzaActivity.class));
+                startActivity(new Intent(AdminActivity.this, AdminActivity.class));
             }
         });
 
         findViewById(R.id.buttonViewDrinks).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  startActivity(new Intent(AdminActivity.this, ViewDrinksActivity.class));
+                startActivity(new Intent(AdminActivity.this, AdminDrinkActivity.class));
             }
         });
 
