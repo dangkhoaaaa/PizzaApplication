@@ -226,6 +226,11 @@ public class PizzaDetailActivity extends AppCompatActivity {
     public static List<Pizza> getDisplayCart() {
         return displayCart;
     }
+    public static void Clear(){
+        displayCart.clear();
+        cart.clear();
+
+    }
     public static List<CustomerPizzaRequestModel> getCart() {
         return cart;
     }
