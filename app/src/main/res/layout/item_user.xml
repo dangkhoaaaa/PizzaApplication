@@ -2,21 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/textViewName"
-        android:layout_width="match_parent"
+        android:id="@+id/nameTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="4dp"/>
+        android:text="nameText"
+        android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/textViewEmail"
-        android:layout_width="match_parent"
+        android:id="@+id/emailTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="emailText"
         android:textSize="16sp"/>
 
+    <TextView
+        android:id="@+id/verifiedAtTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="14sp"
+        android:text="date"
+        android:textColor="#888888"/>
 </LinearLayout>

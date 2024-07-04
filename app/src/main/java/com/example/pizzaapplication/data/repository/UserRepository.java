@@ -2,8 +2,11 @@ package com.example.pizzaapplication.data.repository;
 
 import com.example.pizzaapplication.data.api.ApiService;
 import com.example.pizzaapplication.data.model.Request.RegisterRequestModel;
+import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
 import com.example.pizzaapplication.data.model.Response.RegisterResponse;
 import com.example.pizzaapplication.data.model.Response.TokenResponse;
+import com.example.pizzaapplication.data.model.Response.UsersModel;
+import com.example.pizzaapplication.data.model.Response.UsersResponseModel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,6 +75,11 @@ public class UserRepository {
     public interface RegisterCallback {
         void onSuccess(RegisterResponse registerResponse);
         void onError(String message);
+    }
+
+    public void getUsers(Callback<UsersResponseModel> callback) {
+        Call<UsersResponseModel> call = apiService.getUsers();
+        call.enqueue(callback);
     }
 
 

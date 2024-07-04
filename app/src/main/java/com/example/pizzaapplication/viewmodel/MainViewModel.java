@@ -29,34 +29,34 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(MainRepository mainRepository) {
         users = new MutableLiveData<>();
         this.mainRepository = mainRepository;
-        fetchUsers();
+//        fetchUsers();
     }
 
-    public LiveData<List<User>> getUsers() {
-        return users;
-    }
-
-    private void fetchUsers() {
-        mainRepository.getUsers(new Callback<List<User>>() {
-            @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-                if (response.isSuccessful()) {
-                    users.setValue(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                // Handle failure
-            }
-        });
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        compositeDisposable.clear();
-    }
+//    public LiveData<List<User>> getUsers() {
+//        return users;
+//    }
+//
+//    private void fetchUsers() {
+//        mainRepository.getUsers(new Callback<List<User>>() {
+//            @Override
+//            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+//                if (response.isSuccessful()) {
+//                    users.setValue(response.body());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<User>> call, Throwable t) {
+//                // Handle failure
+//            }
+//        });
+//    }
+//
+//    @Override
+//    protected void onCleared() {
+//        super.onCleared();
+//        compositeDisposable.clear();
+//    }
 }
 
 
