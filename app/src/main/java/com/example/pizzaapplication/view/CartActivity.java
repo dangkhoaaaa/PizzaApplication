@@ -45,7 +45,7 @@ public class CartActivity extends AppCompatActivity {
     private Button buttonCheckout;
     private boolean isCheckoutInProgress = false;
 
-    private String fee = "10000";
+    private String fee = "0";
     int environment = 0; // developer default
     private String merchantName = "HoangNgoc";
     private String merchantCode = "MOMOC2IC20220510";
@@ -225,6 +225,7 @@ public class CartActivity extends AppCompatActivity {
                         // Send phoneNumber & token to your server side to process payment with MoMo server
                         // IF Momo topup success, continue to process your order
                         Toast.makeText(CartActivity.this, "MOMO SUCCESSFUL", Toast.LENGTH_LONG).show();
+                        updateOrderStatus(customerOrderId, 2);
                         showPaymentSuccessPopup(customerOrderId, totalPrice);
                     } else {
                         // Handle token not received
@@ -301,9 +302,37 @@ public class CartActivity extends AppCompatActivity {
         }
         return details.toString();
     }
+    private void updateOrderStatus(int orderId, int status) {
+        // Initialize Retrofit
+        // Make the API call
+        ApiService apiService = RetrofitClient.getApiService();
+        Call<ApiResponse<Integer>> call = apiService.updateOrderStatus(orderId, status);
+
+
+        call.enqueue(new Callback<ApiResponse<Integer>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Integer>> call, Response<ApiResponse<Integer>> response) {
+                if (response.isSuccessful()) {
+                    // Handle success
+                    Toast.makeText(CartActivity.this, "Order status updated successfully!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Handle failure
+                    Toast.makeText(CartActivity.this, "Failed to update order status.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Integer>> call, Throwable t) {
+                // Handle error
+                Toast.makeText(CartActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void clearCartUI() {
         // Clear the cart items from the UI
         listViewCart.setAdapter(null);
+        PizzaDetailActivity.Clear();
+        DrinkFragment.Clear();
     }
 }

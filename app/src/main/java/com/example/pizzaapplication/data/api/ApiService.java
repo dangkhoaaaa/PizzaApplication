@@ -138,6 +138,10 @@ public interface ApiService {
     @GET("cus-orders/{orderId}")
     Call<OrderDetailResponseModel> getOrderDetails(@Path("orderId") String orderId);
 
+    @FormUrlEncoded
+    @PUT("cus-orders/{id}")
+    Call<ApiResponse<Integer>> updateOrderStatus(
+            @Path("id") int id, @Field("status") int status);
     @GET("notifications")
     Call<List<Notification>> getNotification();
 

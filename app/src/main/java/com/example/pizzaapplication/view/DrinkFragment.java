@@ -131,4 +131,9 @@ public class DrinkFragment extends Fragment {
             Log.d(TAG, "Drink: " + drink.getName() + ", Price: " + drink.getPrice());
         }
     }
+    public static void Clear(){
+        displayCart.clear();
+        cart.clear();
+
+    }
 }

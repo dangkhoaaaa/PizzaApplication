@@ -2,22 +2,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.CartActivity">
+    tools:context=".view.CartActivity"
+    android:padding="16dp"> <!-- Áp dụng padding cho RelativeLayout -->
 
     <ListView
         android:id="@+id/listViewCart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="48dp"
-        android:padding="16dp"
+        android:layout_marginBottom="112dp"
         android:background="@color/Gainsboro"/>
 
     <Button
         android:id="@+id/buttonCheckout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Check Out"
+        android:text="Check Out With MOMO"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        style="@style/Btn_Style_Confirm" />
+
+    <Button
+        android:id="@+id/buttonBankPayment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Check Out With Bank"
+        android:layout_above="@id/buttonCheckout"
         android:layout_centerHorizontal="true"
         style="@style/Btn_Style_Confirm" />
 </RelativeLayout>
