@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +40,8 @@ public class PizzaFragment extends Fragment {
     private static final String TAG = "PizzaFragment";
     private ImageSlider imageSlider;
     private List<SlideModel> imageList;
+    private EditText searchEditText, minPriceEditText, maxPriceEditText;
+    private ImageView searchButton;
 
     @Nullable
     @Override
@@ -66,6 +70,12 @@ public class PizzaFragment extends Fragment {
         PizzaRepository pizzaRepository = new PizzaRepository(RetrofitClient.getApiService());
         pizzaViewModel = new PizzaViewModel(pizzaRepository);
 
+        // Initialize Search and Filter Inputs
+        searchEditText = view.findViewById(R.id.searchEditText);
+        minPriceEditText = view.findViewById(R.id.minPriceEditText);
+        maxPriceEditText = view.findViewById(R.id.maxPriceEditText);
+        searchButton = view.findViewById(R.id.searchButton);
+
         // Observe LiveData from PizzaViewModel
         LiveData<PizzaResponseModel> liveDataPizzas = pizzaViewModel.getPizzas();
         liveDataPizzas.observe(getViewLifecycleOwner(), new Observer<PizzaResponseModel>() {
@@ -77,6 +87,24 @@ public class PizzaFragment extends Fragment {
                 } else {
                     Log.d(TAG, "No pizzas received");
                 }
+            }
+        });
+
+        // Set search button click listener
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = searchEditText.getText().toString();
+                int minPrice = minPriceEditText.getText().toString().isEmpty() ? 0 : Integer.parseInt(minPriceEditText.getText().toString());
+                int maxPrice = maxPriceEditText.getText().toString().isEmpty() ? 1000000 : Integer.parseInt(maxPriceEditText.getText().toString());
+
+                // Fetch filtered pizzas
+                int currentPage = 1;
+                int pageSize = 4;
+                boolean sortByPrice = true;
+                boolean descending = true;
+
+                pizzaViewModel.fetchPizzas(currentPage, pageSize, minPrice, maxPrice, name, sortByPrice, descending);
             }
         });
 

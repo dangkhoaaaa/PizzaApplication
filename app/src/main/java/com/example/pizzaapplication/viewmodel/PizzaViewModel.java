@@ -26,13 +26,29 @@ public class PizzaViewModel extends ViewModel {
     public PizzaViewModel(PizzaRepository pizzaRepository) {
         pizzas = new MutableLiveData<>();
         this.pizzaRepository = pizzaRepository;
-        fetchPizzas();
+        fetchPizzas(1, 4, 0, 10000000, "", true, true);
     }
 
     public LiveData<PizzaResponseModel> getPizzas() {
         return pizzas;
     }
+    public void fetchPizzas(int currentPage, int pageSize, int minPrice, int maxPrice, String name, boolean sortByPrice, boolean descending) {
+        pizzaRepository.getPizzas(currentPage, pageSize, minPrice, maxPrice, name, sortByPrice, descending, new Callback<PizzaResponseModel>() {
+            @Override
+            public void onResponse(Call<PizzaResponseModel> call, Response<PizzaResponseModel> response) {
+                if (response.isSuccessful()) {
+                    pizzas.setValue(response.body());
+                } else {
+                    pizzas.setValue(null);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<PizzaResponseModel> call, Throwable t) {
+                pizzas.setValue(null);
+            }
+        });
+    }
     private void fetchPizzas() {
         pizzaRepository.getPizzas(new Callback<PizzaResponseModel>() {
             @Override

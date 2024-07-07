@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.LoginActivity">
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp">
@@ -17,16 +16,13 @@
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
-            <!-- Logo -->
-            <ImageView
-                android:id="@+id/imageViewLogo"
+            <com.airbnb.lottie.LottieAnimationView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/pizza_logo"
-                app:layout_constraintWidth_percent="0.1"
-                android:layout_marginBottom="16dp" />
+                android:layout_height="300dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/houserpizza" />
 
-            <!-- Title Login -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,7 +31,6 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Subtitle -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,22 +39,12 @@
                 android:gravity="center"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Email Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email*"
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
-
-            <!-- Email Input -->
-<!--            <EditText-->
-<!--                android:id="@+id/editTextEmail"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:hint="Email"-->
-<!--                android:inputType="textEmailAddress"-->
-<!--                android:layout_marginBottom="16dp" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutEmail"
@@ -76,7 +61,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Password Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,19 +68,10 @@
                 android:textSize="14sp"
                 android:layout_marginBottom="4dp" />
 
-            <!-- Password Input -->
-<!--            <EditText-->
-<!--                android:id="@+id/editTextPassword"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:hint="Password"-->
-<!--                android:inputType="textPassword"-->
-<!--                android:layout_marginBottom="16dp" />-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayoutPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:passwordToggleEnabled="true"
                 android:layout_marginBottom="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -108,33 +83,20 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <!-- Login Button -->
             <Button
                 android:id="@+id/buttonLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Login"
+                android:backgroundTint="?attr/colorPrimary"
+                android:textColor="@android:color/white"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Forgot Password -->
-            <TextView
-                android:id="@+id/textViewForgotPassword"
-                android:layout_width="wrap_content"
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/buttonGoogleSignIn"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Forgot your password?"
-                android:textColor="@color/Aqua"
                 android:layout_marginBottom="16dp" />
-
-            <!-- Create New Account -->
-            <TextView
-                android:id="@+id/textViewCreateAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Create new account"
-                android:textColor="@color/Blue" />
-
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

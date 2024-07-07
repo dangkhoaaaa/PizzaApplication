@@ -8,6 +8,7 @@ import com.example.pizzaapplication.data.model.Request.DrinkCreateRequestModel;
 import com.example.pizzaapplication.data.model.Request.DrinkUpdateRequestModel;
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
+import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -27,7 +28,10 @@ public class DrinkRepository {
         Call<DrinkResponseModel> call = apiService.getDrinks(authToken);
         call.enqueue(callback);
     }
-
+    public void getDrinks(int currentPage, int pageSize, int minPrice, int maxPrice, String name, boolean sortByPrice, boolean descending, Callback<DrinkResponseModel> callback) {
+        Call<DrinkResponseModel> call = apiService.getDrinks(currentPage, pageSize, minPrice, maxPrice, name, sortByPrice, descending);
+        call.enqueue(callback);
+    }
     public LiveData<ApiResponse> createDrink(DrinkCreateRequestModel drink) {
         MutableLiveData<ApiResponse> responseLiveData = new MutableLiveData<>();
         double priceValue = drink.getPrice();

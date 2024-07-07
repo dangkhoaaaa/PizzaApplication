@@ -28,7 +28,10 @@ public class PizzaRepository {
         Call<PizzaResponseModel> call = apiService.getPizza();
         call.enqueue(callback);
     }
-
+    public void getPizzas(int currentPage, int pageSize, int minPrice, int maxPrice, String name, boolean sortByPrice, boolean descending, Callback<PizzaResponseModel> callback) {
+        Call<PizzaResponseModel> call = apiService.getPizzas(currentPage, pageSize, minPrice, maxPrice, name, sortByPrice, descending);
+        call.enqueue(callback);
+    }
     public LiveData<ApiResponse> createPizza(PizzaCreateRequestModel pizza) {
         MutableLiveData<ApiResponse> responseLiveData = new MutableLiveData<>();
         double priceValue = pizza.getPrice();

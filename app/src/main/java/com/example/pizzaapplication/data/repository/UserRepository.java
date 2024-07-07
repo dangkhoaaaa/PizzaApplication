@@ -82,5 +82,30 @@ public class UserRepository {
         call.enqueue(callback);
     }
 
+    public void loginWithGoogle(String idToken, final LoginCallback callback) {
+        Call<TokenResponse> call = apiService.loginWithGoogle(idToken);
+        call.enqueue(new Callback<TokenResponse>() {
+            @Override
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                if (response.isSuccessful()) {
+                    TokenResponse tokenResponse = response.body();
+                    if (tokenResponse != null) {
+                        callback.onSuccess(tokenResponse);
+                    } else {
+                        callback.onError("Empty response body");
+                    }
+                } else {
+                    callback.onError("Google login failed, error message: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
+                callback.onError("Error occurred while calling Google login API: " + t.getMessage());
+            }
+        });
+    }
+
+
 
 }

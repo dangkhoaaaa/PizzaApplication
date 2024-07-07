@@ -41,8 +41,14 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.0.2")
     implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation ("com.google.android.material:material:version")
-
+    // animation
+    implementation("com.airbnb.android:lottie:3.6.0")
     //   implementation("com.android.volley:volley:1.2.1")
+    // authen gg
+    implementation("com.google.android.gms:play-services-auth:20.5.0")
+    implementation("androidx.credentials:credentials:1.2.2")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
     implementation("com.github.momo-wallet:mobile-sdk:1.0.7")
     implementation("io.socket:socket.io-client:2.0.0")
     implementation ("com.auth0:java-jwt:4.0.0")
