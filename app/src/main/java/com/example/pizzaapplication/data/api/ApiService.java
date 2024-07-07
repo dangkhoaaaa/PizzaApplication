@@ -8,6 +8,7 @@ import com.example.pizzaapplication.data.model.Request.PizzaUpdateRequestModel;
 import com.example.pizzaapplication.data.model.Request.ProfileRequestModel;
 import com.example.pizzaapplication.data.model.Request.RegisterRequestModel;
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
+import com.example.pizzaapplication.data.model.Response.DashboardResponse;
 import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
 import com.example.pizzaapplication.data.model.Response.OrderDetailResponseModel;
 import com.example.pizzaapplication.data.model.Response.OrderHistoryResponseModel;
@@ -169,4 +170,11 @@ public interface ApiService {
 
     @POST("auth/google-login")
     Call<TokenResponse> loginWithGoogle(@Body String idToken);
+
+    @PUT("notifications/{id}")
+    Call<ApiResponse<Integer>> updateNotificationStatus(@Path("id") int id);
+
+    @GET("users/dashboard")
+    Call<DashboardResponse> getDashboard();
+
 }

@@ -3,6 +3,7 @@ package com.example.pizzaapplication.view.admin;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -13,6 +14,7 @@ import com.example.pizzaapplication.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,13 +34,15 @@ import java.util.List;
 public class AdminActivity extends AppCompatActivity {
 
     TextView textView;
-    private NotificationRepository notificationRepository;
+    ImageButton image_notification;
+    NotificationRepository notificationRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
         textView = findViewById(R.id.textNoti);
+        image_notification = findViewById(R.id.imageButton);
         notificationRepository = new NotificationRepository(RetrofitClient.getApiService());
         notificationRepository.getNoti(new Callback<List<Notification>>() {
             @Override
@@ -72,6 +76,13 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
+        image_notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(AdminActivity.this, NotificationActivity.class),1);
+            }
+        });
+
         findViewById(R.id.buttonEditPizza).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +107,7 @@ public class AdminActivity extends AppCompatActivity {
         findViewById(R.id.buttonViewDashboard).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  startActivity(new Intent(AdminActivity.this, DashboardActivity.class));
+                startActivity(new Intent(AdminActivity.this, DashboardActivity.class));
             }
         });
 
@@ -106,5 +117,14 @@ public class AdminActivity extends AppCompatActivity {
              //   startActivity(new Intent(AdminActivity.this, ChatActivity.class));
             }
         });
+
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1){
+            recreate();
+        }
+    }
+
 }
