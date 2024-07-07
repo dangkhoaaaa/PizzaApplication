@@ -20,7 +20,13 @@
             android:layout_weight="0.7"
             android:src="@drawable/pizza_init"
             android:scaleType="centerCrop" />
-
+<com.airbnb.lottie.LottieAnimationView
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    app:lottie_autoPlay="true"
+    app:lottie_loop="true"
+    app:lottie_rawRes="@raw/openpizza"
+    />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

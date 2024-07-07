@@ -1,12 +1,10 @@
 package com.example.pizzaapplication.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,20 +16,26 @@ import com.example.pizzaapplication.data.model.Response.TokenResponse;
 import com.example.pizzaapplication.data.repository.UserRepository;
 import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.utils.JwtUtils;
-import com.google.android.material.textfield.TextInputEditText;
 import com.example.pizzaapplication.view.admin.AdminActivity;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.tasks.Task;
 
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-//    private EditText editTextEmail;
-//    private EditText editTextPassword;
     private TextInputEditText editTextEmail, editTextPassword;
-
     private Button buttonLogin;
-    private TextView textViewForgotPassword;
-    private TextView textViewCreateAccount;
+    private SignInButton buttonGoogleSignIn;
+    private GoogleSignInClient googleSignInClient;
+    private static final int RC_SIGN_IN = 9001;
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,76 +45,117 @@ public class LoginActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
-        textViewForgotPassword = findViewById(R.id.textViewForgotPassword);
-        textViewCreateAccount = findViewById(R.id.textViewCreateAccount);
+        buttonGoogleSignIn = findViewById(R.id.buttonGoogleSignIn);
+
         DataLocalManager.init(this);
 
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = editTextEmail.getText().toString().trim();
-                String password = editTextPassword.getText().toString().trim();
-                if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Handle login logic here
-                    loginUser(email, password);
-                }
+        buttonLogin.setOnClickListener(v -> {
+            String email = editTextEmail.getText().toString().trim();
+            String password = editTextPassword.getText().toString().trim();
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(LoginActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+            } else {
+                loginUser(email, password);
             }
         });
 
-        textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle forgot password logic here
-                Toast.makeText(LoginActivity.this, "Forgot password clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+        buttonGoogleSignIn.setOnClickListener(v -> signInWithGoogle());
 
-        textViewCreateAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle create new account logic here
-                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(intent);
-            }
-        });
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestIdToken("787657429754-5nqjrthjd7s89egmiibnjuhm9u5uiub7.apps.googleusercontent.com")
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
     private void loginUser(String email, String password) {
         ApiService apiService = RetrofitClient.getApiService();
         UserRepository userRepository = new UserRepository(apiService);
 
-        // Thực hiện gọi API login
         userRepository.login(email, password, new UserRepository.LoginCallback() {
             @Override
             public void onSuccess(TokenResponse tokenResponse) {
-                // Đăng nhập thành công, lưu token vào SharedPreferences (ví dụ)
                 String token = tokenResponse.getToken();
                 String userId = JwtUtils.getUserId(token);
                 String role = JwtUtils.getRole(token);
-//                DataLocalManager.setToken(token);
-         //       DataLocalManager.setUserId(userId);
-                if(Objects.equals(role, "1")){
+
+                if (Objects.equals(role, "1")) {
                     Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
+                } else {
                     DataLocalManager.setToken(token);
                     DataLocalManager.setUserId(userId);
-                    // Chuyển sang MainActivity
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }
-
-
             }
 
             @Override
             public void onError(String message) {
-                // Xử lý lỗi đăng nhập
-                Toast.makeText(LoginActivity.this, "Đăng nhập thất bại: " + message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Login failed: " + message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void signInWithGoogle() {
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            if (account != null) {
+                String idToken = account.getIdToken();
+                // Send ID token to server and validate
+                loginUserWithGoogle(idToken);
+            }
+        } catch (ApiException e) {
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+        }
+    }
+
+    private void loginUserWithGoogle(String idToken) {
+        ApiService apiService = RetrofitClient.getApiService();
+        UserRepository userRepository = new UserRepository(apiService);
+
+        userRepository.loginWithGoogle(idToken, new UserRepository.LoginCallback() {
+            @Override
+            public void onSuccess(TokenResponse tokenResponse) {
+                String token = tokenResponse.getToken();
+                String userId = JwtUtils.getUserId(token);
+                String role = JwtUtils.getRole(token);
+
+                if (Objects.equals(role, "1")) {
+                    Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    DataLocalManager.setToken(token);
+                    DataLocalManager.setUserId(userId);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(LoginActivity.this, "Google login failed: " + message, Toast.LENGTH_SHORT).show();
             }
         });
     }

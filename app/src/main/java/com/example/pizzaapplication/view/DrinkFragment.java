@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -38,10 +40,13 @@ public class DrinkFragment extends Fragment {
     private static final String TAG = "DrinkFragment";
     private static List<CustomerDrinkRequestModel> cart = new ArrayList<>();
     private static List<Drink> displayCart = new ArrayList<>();
+    private EditText searchEditText, minPriceEditText, maxPriceEditText;
+    private ImageView searchButton;
 
     public static List<CustomerDrinkRequestModel> getDrinkCart() {
         return cart;
     }
+
     public static List<Drink> getDrinkDisplayCart() {
         return displayCart;
     }
@@ -56,15 +61,21 @@ public class DrinkFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         drinkAdapter = new DrinkAdapter();
         recyclerView.setAdapter(drinkAdapter);
+
+        // Initialize Search and Filter Inputs
+        searchEditText = view.findViewById(R.id.searchEditTextDrink);
+        minPriceEditText = view.findViewById(R.id.minPriceEditTextDrink);
+        maxPriceEditText = view.findViewById(R.id.maxPriceEditTextDrink);
+        searchButton = view.findViewById(R.id.searchButtonDrink);
+
         String token = DataLocalManager.getInstance().getToken();
         if (token == null) {
             // Redirect to login activity if no token is found
-
         }
 
         // Initialize DrinkRepository and DrinkViewModel
         DrinkRepository drinkRepository = new DrinkRepository(RetrofitClient.getApiService());
-        drinkViewModel = new DrinkViewModel(drinkRepository,token);
+        drinkViewModel = new DrinkViewModel(drinkRepository, token);
 
         // Observe LiveData from DrinkViewModel
         LiveData<DrinkResponseModel> liveDataDrinks = drinkViewModel.getDrinks();
@@ -77,6 +88,24 @@ public class DrinkFragment extends Fragment {
                 } else {
                     Log.d(TAG, "No drinks received");
                 }
+            }
+        });
+
+        // Set search button click listener
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = searchEditText.getText().toString();
+                int minPrice = minPriceEditText.getText().toString().isEmpty() ? 0 : Integer.parseInt(minPriceEditText.getText().toString());
+                int maxPrice = maxPriceEditText.getText().toString().isEmpty() ? 1000000 : Integer.parseInt(maxPriceEditText.getText().toString());
+
+                // Fetch filtered drinks
+                int currentPage = 1;
+                int pageSize = 4;
+                boolean sortByPrice = true;
+                boolean descending = true;
+
+                drinkViewModel.fetchDrinks(currentPage, pageSize, minPrice, maxPrice, name, sortByPrice, descending);
             }
         });
 
@@ -102,12 +131,12 @@ public class DrinkFragment extends Fragment {
             if (item.getDrinkId() == drink.getId()) {
                 // If exists, increase the quantity
                 item.setQuantity(item.getQuantity() + quantity);
-                item.setPrice(item.getPrice()  + drink.getPrice()*quantity);
+                item.setPrice(item.getPrice() + drink.getPrice() * quantity);
                 // Update display cart with the increased quantity
                 for (Drink display : displayCart) {
                     if (display.getName().equals(drink.getName())) {
                         display.setQuantity(display.getQuantity() + quantity);
-                        display.setPrice(display.getPrice() + drink.getPrice()*quantity);
+                        display.setPrice(display.getPrice() + drink.getPrice() * quantity);
                         break;
                     }
                 }
@@ -124,16 +153,17 @@ public class DrinkFragment extends Fragment {
         }
 
         // Show a toast message
-        Toast.makeText(getContext(), quantity + " x " + drink.getName() + " added to cart", Toast.LENGTH_SHORT).show(); }
+        Toast.makeText(getContext(), quantity + " x " + drink.getName() + " added to cart", Toast.LENGTH_SHORT).show();
+    }
 
     private void logDrinks(List<DrinkModel> drinks) {
         for (DrinkModel drink : drinks) {
             Log.d(TAG, "Drink: " + drink.getName() + ", Price: " + drink.getPrice());
         }
     }
-    public static void Clear(){
+
+    public static void Clear() {
         displayCart.clear();
         cart.clear();
-
     }
 }

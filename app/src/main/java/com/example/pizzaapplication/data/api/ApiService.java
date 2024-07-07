@@ -145,4 +145,28 @@ public interface ApiService {
     @GET("notifications")
     Call<List<Notification>> getNotification();
 
+    @GET("pizzas")
+    Call<PizzaResponseModel> getPizzas(
+            @Query("current-page") int currentPage,
+            @Query("page-size") int pageSize,
+            @Query("min-price") int minPrice,
+            @Query("max-price") int maxPrice,
+            @Query("name") String name,
+            @Query("sort-by-price") boolean sortByPrice,
+            @Query("descending") boolean descending
+    );
+
+    @GET("drinks")
+    Call<DrinkResponseModel> getDrinks(
+            @Query("current-page") int currentPage,
+            @Query("page-size") int pageSize,
+            @Query("min-price") int minPrice,
+            @Query("max-price") int maxPrice,
+            @Query("name") String name,
+            @Query("sort-by-price") boolean sortByPrice,
+            @Query("descending") boolean descending
+    );
+
+    @POST("auth/google-login")
+    Call<TokenResponse> loginWithGoogle(@Body String idToken);
 }
