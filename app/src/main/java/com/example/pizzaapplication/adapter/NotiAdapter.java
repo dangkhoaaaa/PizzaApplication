@@ -2,6 +2,7 @@ package com.example.pizzaapplication.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -61,7 +63,17 @@ public class NotiAdapter extends RecyclerView.Adapter<NotiAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull NotiAdapter.ViewHolder holder, int position) {
 
-        holder.content_txt.setText(content.get(position).toString());
+        String newcontent = content.get(position).toString();
+        String[] parts = newcontent.split(", ");
+        String order = "";
+        for (int i = 3; i < parts.length; i++) {
+            order += parts[i];
+            if (i != parts.length - 1) {
+                order += ", ";
+            }
+        }
+//        holder.content_txt.setText(content.get(position).toString());
+        holder.content_txt.setText(order);
         holder.date_txt.setText(Utils.formatDateOfBirth(date.get(position).toString()));
 
         if (stats.get(position).equals("1")) {
@@ -92,14 +104,7 @@ public class NotiAdapter extends RecyclerView.Adapter<NotiAdapter.ViewHolder>{
                 int id  = (int) orderId.get(adapterPosition);
 
                 updateNotificationStatus(id, context);
-                //pass data to the next activity
-                Intent intent = new Intent(context, OrderNotiDetailsActivity.class);
-                intent.putExtra("name", name);
-                intent.putExtra("address", address);
-                intent.putExtra("phone", phone);
-                intent.putExtra("order", order);
-                activity.startActivityForResult(intent,1);
-
+                confirmDialog(name, address, phone, order);
             }
         });
     }
@@ -135,7 +140,7 @@ public class NotiAdapter extends RecyclerView.Adapter<NotiAdapter.ViewHolder>{
             public void onResponse(Call<ApiResponse<Integer>> call, Response<ApiResponse<Integer>> response) {
                 if (response.isSuccessful()) {
                     // Handle success
-                    Toast.makeText(context, " Updated successfully!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, " Updated successfully!", Toast.LENGTH_SHORT).show();
                 } else {
                     // Handle failure
                     Toast.makeText(context, "Failed.", Toast.LENGTH_SHORT).show();
@@ -149,4 +154,28 @@ public class NotiAdapter extends RecyclerView.Adapter<NotiAdapter.ViewHolder>{
             }
         });
     }
+
+    void confirmDialog(String name, String address, String phone, String order){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("New order");
+        builder.setMessage(getUpperFirstLetter(name) + "\n" + getUpperFirstLetter(address) + "\n" + getUpperFirstLetter(phone) + "\n" + getUpperFirstLetter(order));
+        builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(context, NotificationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
+        builder.create().show();
+    }
+
+    private String getUpperFirstLetter(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+        return text.substring(0, 1).toUpperCase() + text.substring(1);
+    }
+
+
 }

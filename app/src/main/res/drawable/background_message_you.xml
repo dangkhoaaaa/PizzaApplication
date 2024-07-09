@@ -4,7 +4,7 @@
     <corners android:radius="8dp" /> <!-- Điều chỉnh độ cong của góc (nếu cần) -->
 
     <!-- Màu nền của tin nhắn -->
-    <solid android:color="@color/white" /> <!-- Thay đổi màu theo ý thích -->
+    <solid android:color="#0A78FF" /> <!-- Thay đổi màu theo ý thích -->
 
     <!-- Đường viền nếu cần -->
     <stroke

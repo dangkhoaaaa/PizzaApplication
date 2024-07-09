@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -40,9 +42,10 @@ public class DrinkFragment extends Fragment {
     private static final String TAG = "DrinkFragment";
     private static List<CustomerDrinkRequestModel> cart = new ArrayList<>();
     private static List<Drink> displayCart = new ArrayList<>();
-    private EditText searchEditText, minPriceEditText, maxPriceEditText;
+    private EditText  minPriceEditText, maxPriceEditText;
     private ImageView searchButton;
-
+    private SearchView searchEditText;
+    private LinearLayout priceFilterLayout;
     public static List<CustomerDrinkRequestModel> getDrinkCart() {
         return cart;
     }
@@ -66,7 +69,8 @@ public class DrinkFragment extends Fragment {
         searchEditText = view.findViewById(R.id.searchEditTextDrink);
         minPriceEditText = view.findViewById(R.id.minPriceEditTextDrink);
         maxPriceEditText = view.findViewById(R.id.maxPriceEditTextDrink);
-        searchButton = view.findViewById(R.id.searchButtonDrink);
+        priceFilterLayout = view.findViewById(R.id.priceFilterLayout);
+//        searchButton = view.findViewById(R.id.searchButtonDrink);
 
         String token = DataLocalManager.getInstance().getToken();
         if (token == null) {
@@ -91,21 +95,34 @@ public class DrinkFragment extends Fragment {
             }
         });
 
-        // Set search button click listener
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        searchEditText.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                onChangeSearch(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                onChangeSearch(newText);
+                return false;
+            }
+        });
+
+        // Show price filters when the search view is clicked
+        searchEditText.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = searchEditText.getText().toString();
-                int minPrice = minPriceEditText.getText().toString().isEmpty() ? 0 : Integer.parseInt(minPriceEditText.getText().toString());
-                int maxPrice = maxPriceEditText.getText().toString().isEmpty() ? 1000000 : Integer.parseInt(maxPriceEditText.getText().toString());
+                priceFilterLayout.setVisibility(View.VISIBLE);
+            }
+        });
 
-                // Fetch filtered drinks
-                int currentPage = 1;
-                int pageSize = 4;
-                boolean sortByPrice = true;
-                boolean descending = true;
-
-                drinkViewModel.fetchDrinks(currentPage, pageSize, minPrice, maxPrice, name, sortByPrice, descending);
+        // Hide price filters when the search view is closed
+        searchEditText.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                priceFilterLayout.setVisibility(View.GONE);
+                return false;
             }
         });
 
@@ -165,5 +182,24 @@ public class DrinkFragment extends Fragment {
     public static void Clear() {
         displayCart.clear();
         cart.clear();
+    }
+
+    private  void onChangeSearch(String search){
+        int minPrice = minPriceEditText.getText().toString().isEmpty() ? 0 : Integer.parseInt(minPriceEditText.getText().toString());
+        int maxPrice = maxPriceEditText.getText().toString().isEmpty() ? 1000000 : Integer.parseInt(maxPriceEditText.getText().toString());
+
+        // Fetch filtered pizzas
+        int currentPage = 1;
+        int pageSize = 4;
+        boolean sortByPrice = true;
+        boolean descending = true;
+
+        if (search.isEmpty()) {
+            // Fetch all pizzas
+            drinkViewModel.fetchDrinks(currentPage, pageSize, minPrice, maxPrice, null, sortByPrice, descending);
+        } else {
+            // Fetch pizzas with the search query
+            drinkViewModel.fetchDrinks(currentPage, pageSize, minPrice, maxPrice, search.trim(), sortByPrice, descending);
+        }
     }
 }

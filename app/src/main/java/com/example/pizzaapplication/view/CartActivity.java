@@ -1,6 +1,10 @@
 package com.example.pizzaapplication.view;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.example.pizzaapplication.R;
 import com.example.pizzaapplication.adapter.CartAdapter;
@@ -23,12 +28,14 @@ import com.example.pizzaapplication.data.model.Request.CustomerPizzaRequestModel
 import com.example.pizzaapplication.data.model.Response.ApiResponse;
 import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.utils.JwtUtils;
+import com.example.pizzaapplication.utils.NotificationUtils;
 import com.example.pizzaapplication.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -227,6 +234,7 @@ public class CartActivity extends AppCompatActivity {
                         Toast.makeText(CartActivity.this, "MOMO SUCCESSFUL", Toast.LENGTH_LONG).show();
                         updateOrderStatus(customerOrderId, 2);
                         showPaymentSuccessPopup(customerOrderId, totalPrice);
+                        sendNotification();
                     } else {
                         // Handle token not received
                     }
@@ -247,6 +255,28 @@ public class CartActivity extends AppCompatActivity {
             // Handle token not received
         }
     }
+
+    private void sendNotification() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pizza_logo);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationUtils.CHANNEL_ID)
+                .setContentTitle("Payment Success")
+                .setContentText("Your payment has been processed successfully.")
+                .setSmallIcon(R.drawable.baseline_notifications_none_24)
+                .setLargeIcon(bitmap)
+                .setColor(getResources().getColor(R.color.colorPrimary))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.notify(getNotificationId(), builder.build());
+        }
+    }
+
+    private int getNotificationId() {
+        return (int) new Date().getTime();
+    }
+
     private void showPaymentSuccessPopup(int orderId, double totalPrice) {
         // Inflate the custom layout/view
         View view = getLayoutInflater().inflate(R.layout.popup_payment_success, null);

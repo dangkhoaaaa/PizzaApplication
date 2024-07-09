@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "LoginActivity";
+    private TextView textViewSignUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,12 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonGoogleSignIn = findViewById(R.id.buttonGoogleSignIn);
+        textViewSignUp = findViewById(R.id.textViewSignUp);
+
+        textViewSignUp.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+            startActivity(intent);
+        });
 
         DataLocalManager.init(this);
 
@@ -63,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .requestIdToken("787657429754-5nqjrthjd7s89egmiibnjuhm9u5uiub7.apps.googleusercontent.com")
+                .requestIdToken("455344328863-lgeatr4bad5qtr6s6b9ngpiq0jmfv10f.apps.googleusercontent.com")
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
