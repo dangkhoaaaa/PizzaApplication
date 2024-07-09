@@ -143,7 +143,7 @@ public class AdminPizza extends AppCompatActivity {
         builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-// Upload the image first if a new one is selected
+                // Upload the image first if a new one is selected
                 if (selectedImageUri != null) {
                     uploadImage(selectedImageUri, new OnImageUploadListener() {
                         @Override
@@ -202,6 +202,7 @@ public class AdminPizza extends AppCompatActivity {
                 if (apiResponse != null) {
                     Toast.makeText(AdminPizza.this, "Pizza updated", Toast.LENGTH_SHORT).show();
                     pizzaViewModel.getPizzas();
+                    reloadActivity();
                 } else {
                     Toast.makeText(AdminPizza.this, "Failed to update pizza", Toast.LENGTH_SHORT).show();
                 }
@@ -271,6 +272,7 @@ public class AdminPizza extends AppCompatActivity {
                 if (apiResponse != null) {
                     Toast.makeText(AdminPizza.this, "Pizza added", Toast.LENGTH_SHORT).show();
                     pizzaViewModel.getPizzas();
+                    reloadActivity();
                 } else {
                     Toast.makeText(AdminPizza.this, "Failed to add pizza", Toast.LENGTH_SHORT).show();
                 }
@@ -336,5 +338,10 @@ public class AdminPizza extends AppCompatActivity {
 
     interface OnImageUploadListener {
         void onImageUploaded(String imageUrl);
+    }
+    private void reloadActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 }

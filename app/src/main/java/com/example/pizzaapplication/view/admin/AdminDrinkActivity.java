@@ -1,6 +1,7 @@
 package com.example.pizzaapplication.view.admin;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,10 +32,19 @@ import com.example.pizzaapplication.data.model.Response.DrinkResponseModel;
 import com.example.pizzaapplication.data.repository.DrinkRepository;
 import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.viewmodel.DrinkViewModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AdminDrinkActivity extends AppCompatActivity {
 
@@ -46,6 +56,8 @@ public class AdminDrinkActivity extends AppCompatActivity {
 
     private ImageView selectedImageView;
     private Uri selectedImageUri;
+    private ProgressDialog progressDialog;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,39 +138,37 @@ public class AdminDrinkActivity extends AppCompatActivity {
         builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String name = inputName.getText().toString();
-                String description = inputDescription.getText().toString();
-                double price = Double.parseDouble(inputPrice.getText().toString());
-
-                DrinkUpdateRequestModel updateDrink = new DrinkUpdateRequestModel(
-                        drink.getId(),
-                        name,
-                        description,
-                        price,
-                        selectedImageUri != null ? selectedImageUri.toString() : drink.getImage()
-                );
-
-                drinkViewModel.updateDrink(updateDrink).observe(AdminDrinkActivity.this, new Observer<ApiResponse>() {
-                    @Override
-                    public void onChanged(ApiResponse apiResponse) {
-                        if (apiResponse != null) {
-                            Toast.makeText(AdminDrinkActivity.this, "Drink updated", Toast.LENGTH_SHORT).show();
-                            loadDrinks();
-                            dialog.dismiss();
-                        } else {
-                            Toast.makeText(AdminDrinkActivity.this, "Failed to update drink", Toast.LENGTH_SHORT).show();
+                // Upload the image first if a new one is selected
+                if (selectedImageUri != null) {
+                    uploadImage(selectedImageUri, new OnImageUploadListener() {
+                        @Override
+                        public void onImageUploaded(String imageUrl) {
+                            // Update drink with new image URL
+                            updateDrink(drink, inputName.getText().toString(), inputDescription.getText().toString(), Double.parseDouble(inputPrice.getText().toString()), imageUrl);
                         }
-                    }
-                });
+                    });
+                } else {
+                    // Update drink with existing image URL
+                    updateDrink(drink, inputName.getText().toString(), inputDescription.getText().toString(), Double.parseDouble(inputPrice.getText().toString()), drink.getImage());
+                }
             }
         });
 
         builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Implement delete operation here
-                // drinkViewModel.deleteDrink(drink.getId());
-                Toast.makeText(AdminDrinkActivity.this, "Drink deleted", Toast.LENGTH_SHORT).show();
+                // Delete drink
+//                drinkViewModel.deleteDrink(drink.getId()).observe(AdminDrinkActivity.this, new Observer<ApiResponse>() {
+//                    @Override
+//                    public void onChanged(ApiResponse apiResponse) {
+//                        if (apiResponse != null) {
+//                            Toast.makeText(AdminDrinkActivity.this, "Drink deleted", Toast.LENGTH_SHORT).show();
+//                            reloadActivity(); // Reload the activity after deleting
+//                        } else {
+//                            Toast.makeText(AdminDrinkActivity.this, "Failed to delete drink", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
             }
         });
 
@@ -170,6 +180,28 @@ public class AdminDrinkActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private void updateDrink(DrinkModel drink, String name, String description, double price, String imageUrl) {
+        DrinkUpdateRequestModel updateDrink = new DrinkUpdateRequestModel(
+                drink.getId(),
+                name,
+                description,
+                price,
+                imageUrl
+        );
+
+        drinkViewModel.updateDrink(updateDrink).observe(AdminDrinkActivity.this, new Observer<ApiResponse>() {
+            @Override
+            public void onChanged(ApiResponse apiResponse) {
+                if (apiResponse != null) {
+                    Toast.makeText(AdminDrinkActivity.this, "Drink updated", Toast.LENGTH_SHORT).show();
+                    reloadActivity(); // Reload the activity after updating
+                } else {
+                    Toast.makeText(AdminDrinkActivity.this, "Failed to update drink", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void showAddDrinkDialog() {
@@ -194,29 +226,19 @@ public class AdminDrinkActivity extends AppCompatActivity {
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String name = inputName.getText().toString();
-                String description = inputDescription.getText().toString();
-                double price = Double.parseDouble(inputPrice.getText().toString());
-
-                DrinkCreateRequestModel createDrink = new DrinkCreateRequestModel(
-                        name,
-                        description,
-                        price,
-                        selectedImageUri != null ? selectedImageUri.toString() : ""
-                );
-
-                drinkViewModel.createDrink(createDrink).observe(AdminDrinkActivity.this, new Observer<ApiResponse>() {
-                    @Override
-                    public void onChanged(ApiResponse apiResponse) {
-                        if (apiResponse != null) {
-                            Toast.makeText(AdminDrinkActivity.this, "Drink added", Toast.LENGTH_SHORT).show();
-                            loadDrinks();
-                            dialog.dismiss();
-                        } else {
-                            Toast.makeText(AdminDrinkActivity.this, "Failed to add drink", Toast.LENGTH_SHORT).show();
+                // Upload the image first
+                if (selectedImageUri != null) {
+                    uploadImage(selectedImageUri, new OnImageUploadListener() {
+                        @Override
+                        public void onImageUploaded(String imageUrl) {
+                            // Add drink with new image URL
+                            addDrink(inputName.getText().toString(), inputDescription.getText().toString(), Double.parseDouble(inputPrice.getText().toString()), imageUrl);
                         }
-                    }
-                });
+                    });
+                } else {
+                    // Add drink with no image URL
+                    addDrink(inputName.getText().toString(), inputDescription.getText().toString(), Double.parseDouble(inputPrice.getText().toString()), "");
+                }
             }
         });
 
@@ -228,6 +250,27 @@ public class AdminDrinkActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private void addDrink(String name, String description, double price, String imageUrl) {
+        DrinkCreateRequestModel newDrink = new DrinkCreateRequestModel(
+                name,
+                description,
+                price,
+                imageUrl
+        );
+
+        drinkViewModel.createDrink(newDrink).observe(AdminDrinkActivity.this, new Observer<ApiResponse>() {
+            @Override
+            public void onChanged(ApiResponse apiResponse) {
+                if (apiResponse != null) {
+                    Toast.makeText(AdminDrinkActivity.this, "Drink added", Toast.LENGTH_SHORT).show();
+                    reloadActivity(); // Reload the activity after adding
+                } else {
+                    Toast.makeText(AdminDrinkActivity.this, "Failed to add drink", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void openImageSelector() {
@@ -252,4 +295,56 @@ public class AdminDrinkActivity extends AppCompatActivity {
         }
     }
 
+    // Method to upload the image to Firebase Storage
+    private void uploadImage(Uri imageUri, final OnImageUploadListener listener) {
+        if (imageUri != null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+            StorageReference ref = storageReference.child("images/" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date()));
+
+            ref.putFile(imageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String downloadUrl = uri.toString();
+                                    listener.onImageUploaded(downloadUrl);
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(AdminDrinkActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
+        }
+    }
+
+    // Listener interface for image upload
+    private interface OnImageUploadListener {
+        void onImageUploaded(String imageUrl);
+    }
+
+    // Method to reload the activity
+    private void reloadActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
 }
