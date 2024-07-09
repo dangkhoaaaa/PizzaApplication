@@ -1,6 +1,7 @@
 package com.example.pizzaapplication.view.admin;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -35,10 +35,18 @@ import com.example.pizzaapplication.data.model.Response.PizzaModel;
 import com.example.pizzaapplication.data.model.Response.PizzaResponseModel;
 import com.example.pizzaapplication.data.repository.PizzaRepository;
 import com.example.pizzaapplication.viewmodel.PizzaViewModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AdminPizza extends AppCompatActivity {
 
@@ -50,11 +58,12 @@ public class AdminPizza extends AppCompatActivity {
 
     private ImageView selectedImageView;
     private Uri selectedImageUri;
+    private ProgressDialog progressDialog;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_pizza);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -134,32 +143,19 @@ public class AdminPizza extends AppCompatActivity {
         builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Update pizza
-                String name = inputName.getText().toString();
-                String description = inputDescription.getText().toString();
-                double price = Double.parseDouble(inputPrice.getText().toString());
-
-                PizzaUpdateRequestModel updatePizza = new PizzaUpdateRequestModel(
-                        pizza.getPizzaId(),
-                        name,
-                        description,
-                        price,
-                        selectedImageUri != null ? selectedImageUri.toString() : pizza.getImage() // Keep existing image if no new one selected
-                );
-
-                pizzaViewModel.updatePizza(updatePizza).observe(AdminPizza.this, new Observer<ApiResponse>() {
-                    @Override
-                    public void onChanged(ApiResponse apiResponse) {
-                        if (apiResponse != null) {
-                            Toast.makeText(AdminPizza.this, "Pizza updated", Toast.LENGTH_SHORT).show();
-                            // Re-fetch pizzas after updating
-                            pizzaViewModel.getPizzas();
-                            dialog.dismiss();
-                        } else {
-                            Toast.makeText(AdminPizza.this, "Failed to update pizza", Toast.LENGTH_SHORT).show();
+// Upload the image first if a new one is selected
+                if (selectedImageUri != null) {
+                    uploadImage(selectedImageUri, new OnImageUploadListener() {
+                        @Override
+                        public void onImageUploaded(String imageUrl) {
+                            // Update pizza with new image URL
+                            updatePizza(pizza, inputName.getText().toString(), inputDescription.getText().toString(), Double.parseDouble(inputPrice.getText().toString()), imageUrl);
                         }
-                    }
-                });
+                    });
+                } else {
+                    // Update pizza with existing image URL
+                    updatePizza(pizza, inputName.getText().toString(), inputDescription.getText().toString(), Double.parseDouble(inputPrice.getText().toString()), pizza.getImage());
+                }
             }
         });
 
@@ -167,7 +163,17 @@ public class AdminPizza extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Delete pizza
-
+//                pizzaViewModel.deletePizza(pizza.getPizzaId()).observe(AdminPizza.this, new Observer<ApiResponse>() {
+//                    @Override
+//                    public void onChanged(ApiResponse apiResponse) {
+//                        if (apiResponse != null) {
+//                            Toast.makeText(AdminPizza.this, "Pizza deleted", Toast.LENGTH_SHORT).show();
+//                            pizzaViewModel.getPizzas();
+//                        } else {
+//                            Toast.makeText(AdminPizza.this, "Failed to delete pizza", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
             }
         });
 
@@ -179,6 +185,28 @@ public class AdminPizza extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private void updatePizza(PizzaModel pizza, String name, String description, double price, String imageUrl) {
+        PizzaUpdateRequestModel updatePizza = new PizzaUpdateRequestModel(
+                pizza.getPizzaId(),
+                name,
+                description,
+                price,
+                imageUrl
+        );
+
+        pizzaViewModel.updatePizza(updatePizza).observe(AdminPizza.this, new Observer<ApiResponse>() {
+            @Override
+            public void onChanged(ApiResponse apiResponse) {
+                if (apiResponse != null) {
+                    Toast.makeText(AdminPizza.this, "Pizza updated", Toast.LENGTH_SHORT).show();
+                    pizzaViewModel.getPizzas();
+                } else {
+                    Toast.makeText(AdminPizza.this, "Failed to update pizza", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void showAddPizzaDialog() {
@@ -203,31 +231,19 @@ public class AdminPizza extends AppCompatActivity {
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Add pizza
-                String name = inputName.getText().toString();
-                String description = inputDescription.getText().toString();
-                double price = Double.parseDouble(inputPrice.getText().toString());
-
-                PizzaCreateRequestModel newPizza = new PizzaCreateRequestModel(
-                        name,
-                        description,
-                        price,
-                        selectedImageUri != null ? selectedImageUri.toString() : "" // Set empty string if no image selected
-                );
-
-                pizzaViewModel.createPizza(newPizza).observe(AdminPizza.this, new Observer<ApiResponse>() {
-                    @Override
-                    public void onChanged(ApiResponse apiResponse) {
-                        if (apiResponse != null) {
-                            Toast.makeText(AdminPizza.this, "Pizza added", Toast.LENGTH_SHORT).show();
-                            // Re-fetch pizzas after adding
-                            pizzaViewModel.getPizzas();
-                            dialog.dismiss();
-                        } else {
-                            Toast.makeText(AdminPizza.this, "Failed to add pizza", Toast.LENGTH_SHORT).show();
+                // Upload the image first
+                if (selectedImageUri != null) {
+                    uploadImage(selectedImageUri, new OnImageUploadListener() {
+                        @Override
+                        public void onImageUploaded(String imageUrl) {
+                            // Add pizza with new image URL
+                            addPizza(inputName.getText().toString(), inputDescription.getText().toString(), Double.parseDouble(inputPrice.getText().toString()), imageUrl);
                         }
-                    }
-                });
+                    });
+                } else {
+                    // Add pizza with no image URL
+                    addPizza(inputName.getText().toString(), inputDescription.getText().toString(), Double.parseDouble(inputPrice.getText().toString()), "");
+                }
             }
         });
 
@@ -239,6 +255,27 @@ public class AdminPizza extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private void addPizza(String name, String description, double price, String imageUrl) {
+        PizzaCreateRequestModel newPizza = new PizzaCreateRequestModel(
+                name,
+                description,
+                price,
+                imageUrl
+        );
+
+        pizzaViewModel.createPizza(newPizza).observe(AdminPizza.this, new Observer<ApiResponse>() {
+            @Override
+            public void onChanged(ApiResponse apiResponse) {
+                if (apiResponse != null) {
+                    Toast.makeText(AdminPizza.this, "Pizza added", Toast.LENGTH_SHORT).show();
+                    pizzaViewModel.getPizzas();
+                } else {
+                    Toast.makeText(AdminPizza.this, "Failed to add pizza", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void openImageSelector() {
@@ -258,5 +295,46 @@ public class AdminPizza extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void uploadImage(Uri imageUri, OnImageUploadListener listener) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.ENGLISH);
+        Date date = new Date();
+        String imageName = formatter.format(date);
+        storageReference = FirebaseStorage.getInstance().getReference("images/" + imageName);
+
+        storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        progressDialog.dismiss();
+                        String imageUrl = uri.toString();
+                        listener.onImageUploaded(imageUrl);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(AdminPizza.this, "Failed to get download URL", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(Exception e) {
+                progressDialog.dismiss();
+                Toast.makeText(AdminPizza.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    interface OnImageUploadListener {
+        void onImageUploaded(String imageUrl);
     }
 }
