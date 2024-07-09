@@ -118,6 +118,7 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                startActivity(new Intent(AdminActivity.this, AdminChatUsersActivity.class));
             }
         });
 
