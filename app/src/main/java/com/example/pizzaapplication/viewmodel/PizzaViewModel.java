@@ -26,7 +26,7 @@ public class PizzaViewModel extends ViewModel {
     public PizzaViewModel(PizzaRepository pizzaRepository) {
         pizzas = new MutableLiveData<>();
         this.pizzaRepository = pizzaRepository;
-        fetchPizzas(1, 4, 0, 10000000, "", true, true);
+        fetchPizzas(1, 999, 0, 10000000, "", true, true);
     }
 
     public LiveData<PizzaResponseModel> getPizzas() {

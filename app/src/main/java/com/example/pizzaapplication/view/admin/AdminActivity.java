@@ -114,7 +114,7 @@ public class AdminActivity extends AppCompatActivity {
         findViewById(R.id.buttonChatWithCustomers).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             //   startActivity(new Intent(AdminActivity.this, ChatActivity.class));
+                startActivity(new Intent(AdminActivity.this, AdminChatUsersActivity.class));
             }
         });
 
