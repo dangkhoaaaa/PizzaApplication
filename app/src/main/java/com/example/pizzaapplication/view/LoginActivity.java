@@ -129,19 +129,28 @@ public class LoginActivity extends AppCompatActivity {
 
             if (account != null) {
                 String idToken = account.getIdToken();
+                String email = account.getEmail();
+                String name = account.getDisplayName();
+                String avatar = account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : null;
+                String address = "a"; // Điền thông tin địa chỉ của người dùng ở đây
+                String phone = "23123123"; // Điền thông tin số điện thoại của người dùng ở đây
+                // Now you have the email, name, and avatar
                 // Send ID token to server and validate
-                loginUserWithGoogle(idToken);
+                loginUserWithGoogle(address, email, name, phone);
             }
         } catch (ApiException e) {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(this, "Failed to sign in with Google: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void loginUserWithGoogle(String idToken) {
+
+
+    private void loginUserWithGoogle(String adress, String email, String name, String phone) {
         ApiService apiService = RetrofitClient.getApiService();
         UserRepository userRepository = new UserRepository(apiService);
 
-        userRepository.loginWithGoogle(idToken, new UserRepository.LoginCallback() {
+        userRepository.loginWithGoogle(adress, email, name, phone, new UserRepository.LoginCallback() {
             @Override
             public void onSuccess(TokenResponse tokenResponse) {
                 String token = tokenResponse.getToken();
@@ -163,8 +172,9 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(String message) {
-                Toast.makeText(LoginActivity.this, "Google login failed: " + message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Login failed: " + message, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }
