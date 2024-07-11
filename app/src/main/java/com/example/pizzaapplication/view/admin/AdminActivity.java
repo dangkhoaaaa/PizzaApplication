@@ -110,7 +110,7 @@ public class AdminActivity extends AppCompatActivity {
         findViewById(R.id.buttonViewDashboard).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(AdminActivity.this, DashboardActivity.class));
+                startActivity(new Intent(AdminActivity.this, DashboardActivity.class));
             }
         });
 

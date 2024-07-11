@@ -1,45 +1,44 @@
 {
   "project_info": {
-    "project_number": "1072643683675",
-    "project_id": "pizzaf-2a8ed",
-    "storage_bucket": "pizzaf-2a8ed.appspot.com"
+    "project_number": "787657429754",
+    "project_id": "app-pizza-428611",
+    "storage_bucket": "app-pizza-428611.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1072643683675:android:660feb27cf517adce1d67e",
-        "android_client_info": {
-          "package_name": "com.example.firebase"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAEXnHpeerDzn-2wDftdjqorDNGcTy9_lQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1072643683675:android:dbd8303981ae953ae1d67e",
+        "mobilesdk_app_id": "1:787657429754:android:4d8e6faa223ffada79ef43",
         "android_client_info": {
           "package_name": "com.example.pizzaapplication"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "787657429754-62tgg8qrt1gdvup9g884tpc272ii56u0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pizzaapplication",
+            "certificate_hash": "aea2a86d220217d4cc52b06d119b5eeed1eb98cb"
+          }
+        },
+        {
+          "client_id": "787657429754-3ii24krbtnre6h1cv52m9d062hqg80cq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyAEXnHpeerDzn-2wDftdjqorDNGcTy9_lQ"
+          "current_key": "AIzaSyDCFP2ag4xQwqnInetaFoj3Pdpkd88dClw"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787657429754-3ii24krbtnre6h1cv52m9d062hqg80cq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
