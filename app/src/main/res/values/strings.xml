@@ -4,4 +4,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profile_update_success">Information of you have updated</string>
 
+    <string name="facebook_app_id">1570185950266869</string>
+    <string name="fb_login_protocol_scheme">fb1570185950266869</string>
+    <string name="facebook_client_token">60a11dad0667932d805be23d7803f7a8</string>
+
+
 </resources>

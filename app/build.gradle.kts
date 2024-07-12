@@ -49,6 +49,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.5.0")
     implementation("androidx.credentials:credentials:1.2.2")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+// facebook authen
+    implementation("com.facebook.android:facebook-android-sdk:[4,5)")
 
     implementation("com.github.momo-wallet:mobile-sdk:1.0.7")
     implementation("io.socket:socket.io-client:2.0.0")

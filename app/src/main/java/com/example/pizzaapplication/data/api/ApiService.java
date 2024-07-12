@@ -176,13 +176,13 @@ public interface ApiService {
 
     @GET("users/dashboard")
     Call<DashboardResponse> getDashboard();
-
+    @FormUrlEncoded
     @POST("users/login-by-google")
     Call<TokenResponse> loginWithGoogle(
             @Field("name") String name,
             @Field("email") String email,
-
             @Field("phone") String phone,
             @Field("address") String address
     );
+
 }
