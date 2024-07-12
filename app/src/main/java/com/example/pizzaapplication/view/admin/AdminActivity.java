@@ -1,25 +1,25 @@
 package com.example.pizzaapplication.view.admin;
 
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-
-import android.content.Intent;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.example.pizzaapplication.R;
 import com.example.pizzaapplication.data.api.RetrofitClient;
 import com.example.pizzaapplication.data.model.Notification;
 import com.example.pizzaapplication.data.repository.NotificationRepository;
 import com.example.pizzaapplication.utils.NotificationUtils;
+import com.example.pizzaapplication.view.LoginActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +33,7 @@ public class AdminActivity extends AppCompatActivity {
     TextView textView;
     ImageButton image_notification;
     NotificationRepository notificationRepository;
+    Button buttonLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class AdminActivity extends AppCompatActivity {
 
         textView = findViewById(R.id.textNoti);
         image_notification = findViewById(R.id.imageButton);
+        buttonLogout = findViewById(R.id.buttonLogout);
         notificationRepository = new NotificationRepository(RetrofitClient.getApiService());
 
         notificationRepository.getNoti(new Callback<List<Notification>>() {
@@ -59,7 +61,7 @@ public class AdminActivity extends AppCompatActivity {
                             }
                         }
                         if (count > 0) {
-                            textView.setText("" + count );
+                            textView.setText("" + count);
                             textView.setVisibility(View.VISIBLE);
                             sendNotification(count); // Gọi thông báo khi có đơn hàng mới
                         } else {
@@ -82,7 +84,7 @@ public class AdminActivity extends AppCompatActivity {
         image_notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(AdminActivity.this, NotificationActivity.class),1);
+                startActivityForResult(new Intent(AdminActivity.this, NotificationActivity.class), 1);
             }
         });
 
@@ -117,17 +119,25 @@ public class AdminActivity extends AppCompatActivity {
         findViewById(R.id.buttonChatWithCustomers).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startActivity(new Intent(AdminActivity.this, AdminChatUsersActivity.class));
             }
         });
 
+        // Logout button click listener
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1){
+        if (requestCode == 1) {
             recreate();
         }
     }

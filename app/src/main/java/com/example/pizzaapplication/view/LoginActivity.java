@@ -3,7 +3,6 @@ package com.example.pizzaapplication.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,15 +17,27 @@ import com.example.pizzaapplication.data.repository.UserRepository;
 import com.example.pizzaapplication.share.DataLocalManager;
 import com.example.pizzaapplication.utils.JwtUtils;
 import com.example.pizzaapplication.view.admin.AdminActivity;
-import com.google.android.material.textfield.TextInputEditText;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 
+import org.json.JSONException;
+
+import java.util.Arrays;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -34,7 +45,9 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputEditText editTextEmail, editTextPassword;
     private Button buttonLogin;
     private SignInButton buttonGoogleSignIn;
+    private LoginButton buttonFacebookLogin;
     private GoogleSignInClient googleSignInClient;
+    private CallbackManager callbackManager;
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "LoginActivity";
     private TextView textViewSignUp;
@@ -48,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonGoogleSignIn = findViewById(R.id.buttonGoogleSignIn);
+        buttonFacebookLogin = findViewById(R.id.buttonFacebookLogin);
         textViewSignUp = findViewById(R.id.textViewSignUp);
 
         textViewSignUp.setOnClickListener(v -> {
@@ -71,10 +85,29 @@ public class LoginActivity extends AppCompatActivity {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .requestIdToken("787657429754-3ii24krbtnre6h1cv52m9d062hqg80cq.apps.googleusercontent.com")
+                .requestIdToken("787657429754-3ii24krbtnre6h1cv52m9d062hqg80cq.apps.googleusercontent.com") // Replace with your client ID
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        callbackManager = CallbackManager.Factory.create();
+
+        buttonFacebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(LoginActivity.this, "Facebook login canceled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(LoginActivity.this, "Facebook login failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loginUser(String email, String password) {
@@ -109,8 +142,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signInWithGoogle() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+        googleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            Intent signInIntent = googleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        });
     }
 
     @Override
@@ -120,6 +155,8 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+        } else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -132,8 +169,8 @@ public class LoginActivity extends AppCompatActivity {
                 String email = account.getEmail();
                 String name = account.getDisplayName();
                 String avatar = account.getPhotoUrl() != null ? account.getPhotoUrl().toString() : null;
-                String address = "a"; // Điền thông tin địa chỉ của người dùng ở đây
-                String phone = "23123123"; // Điền thông tin số điện thoại của người dùng ở đây
+                String address = "a"; // Fill in the user's address here
+                String phone = "23123123"; // Fill in the user's phone number here
                 // Now you have the email, name, and avatar
                 // Send ID token to server and validate
                 loginUserWithGoogle(address, email, name, phone);
@@ -144,13 +181,38 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void handleFacebookAccessToken(AccessToken token) {
+        GraphRequest request = GraphRequest.newMeRequest(
+                token,
+                (object, response) -> {
+                    try {
+                        // Get user data from the response
+                        String name = object.getString("name");
+                        String email = object.has("email") ? object.getString("email") : null;
+                        String phone = "23123123"; // Handle phone number accordingly
+                        String address = "User Address"; // Handle address accordingly
+
+                        // Call your login method with the retrieved data
+                        loginUserWithGoogle(address, email, name, phone);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(LoginActivity.this, "Error retrieving user data", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        // Set the parameters to request the necessary fields
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email"); // Request the user's ID, name, and email
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
 
 
-    private void loginUserWithGoogle(String adress, String email, String name, String phone) {
+    private void loginUserWithGoogle(String address, String email, String name, String phone) {
         ApiService apiService = RetrofitClient.getApiService();
         UserRepository userRepository = new UserRepository(apiService);
 
-        userRepository.loginWithGoogle(adress, email, name, phone, new UserRepository.LoginCallback() {
+        userRepository.loginWithGoogle(address, email, name, phone, new UserRepository.LoginCallback() {
             @Override
             public void onSuccess(TokenResponse tokenResponse) {
                 String token = tokenResponse.getToken();
@@ -176,5 +238,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
 }
