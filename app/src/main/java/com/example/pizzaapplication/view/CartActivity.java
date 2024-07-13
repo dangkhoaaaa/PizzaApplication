@@ -11,9 +11,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.NotificationCompat;
 
 import com.example.pizzaapplication.R;
@@ -49,7 +51,8 @@ import vn.momo.momo_partner.MoMoParameterNameMap;
 public class CartActivity extends AppCompatActivity {
 
     private ListView listViewCart;
-    private Button buttonCheckout;
+    //    private Button buttonCheckout;
+    private AppCompatButton buttonCheckout;
     private boolean isCheckoutInProgress = false;
 
     private String fee = "0";
@@ -332,6 +335,7 @@ public class CartActivity extends AppCompatActivity {
         }
         return details.toString();
     }
+
     private void updateOrderStatus(int orderId, int status) {
         // Initialize Retrofit
         // Make the API call

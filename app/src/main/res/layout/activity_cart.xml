@@ -10,17 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="112dp"
-        android:background="@color/Gainsboro"/>
+        android:background="@color/Gainsboro" />
 
-    <Button
+
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonCheckout"
+        style="@android:style/Widget.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Check Out With MOMO"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        style="@style/Btn_Style_Confirm" />
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/btn_background_momo"
+        android:text="Check Out With MOMO"
+        android:textColor="@color/White"
+        android:textStyle="bold" />
+
 
     <Button
         android:id="@+id/buttonBankPayment"

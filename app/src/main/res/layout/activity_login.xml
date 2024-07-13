@@ -72,7 +72,9 @@
                 android:id="@+id/textInputLayoutPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                app:passwordToggleEnabled="true"
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextPassword"
@@ -98,6 +100,7 @@
                 android:text="Login"
                 android:backgroundTint="?attr/colorPrimary"
                 android:textColor="@android:color/white"
+                android:background="@drawable/green_gradient"
                 android:layout_marginBottom="16dp" />
 
             <com.google.android.gms.common.SignInButton
@@ -112,6 +115,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginBottom="16dp" />
+
+
 
         </LinearLayout>
     </ScrollView>
