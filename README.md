@@ -15,7 +15,7 @@
 
 ## Introduction
 
-Welcome to the Pizza Application! This mobile application is developed using Android Studio and Java. It offers a seamless and interactive experience for users to order pizzas, view drinks, update their profile, find nearby pizza stores on the map, and more.
+Welcome to the Pizza Application! This mobile application is developed using Android Studio Java. It offers a seamless and interactive experience for users to order pizzas, view drinks, update their profile, find nearby pizza stores on the map, and more.
 
 ## Features
 
